@@ -1,2 +1,2 @@
 # Prog1orak
-Prog1 Órai feladatok
+Prog1 laborok órai feladatai
