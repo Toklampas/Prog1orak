@@ -2,12 +2,23 @@
 
 int main()
 {
-    int sor[100]={1};
-    int n, o=1;
-    scanf("%d", &n);
-    for (int i = 0; i < 100; i++)
+    int sor[100]={1, 2};
+    int input, loc1=1, loc2=0, next_number=2;
+    scanf("%d", &input);
+    while (loc2 < 99)
+    {
+        int block_size = sor[loc1];
+        for (int i = 0; i < block_size && loc2 < 99; i++)
         {
-            sor[i] = i+1;
-            o++;
+            loc2++;
+            sor[loc2] = next_number;
         }
+        loc1++;
+        next_number++;
+        if (next_number > input)
+            next_number = 1;
+    }
+    for (int i = 0; i < 100; i++)
+        printf("%d ", sor[i]);
+    return 0;
 }
