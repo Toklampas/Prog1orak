@@ -18,7 +18,3 @@ int main ()
     printf("%d", loc-1);
     return 0;
 }
-
-//2 0 inputnál a helyes válasz 93 lenne
-//1 1 => 92
-//0 1 => 93
