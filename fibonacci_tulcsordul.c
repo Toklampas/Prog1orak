@@ -10,7 +10,7 @@ int main ()
             scanf("%llu", &input);
             sor[i] = input;
         }
-    while (sor[loc-1] <= LLONG_MAX)
+    while (sor[loc-1] <= ULLONG_MAX - sor[loc-2])
     {
         sor[loc] = sor[loc-1] + sor [loc-2];
         loc++;
