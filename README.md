@@ -1,2 +1,2 @@
 # Prog1orak
-Prog1 laborok órai feladatai
+A BME VIHIAA01 Prog1 laborjainak órai feladatai
