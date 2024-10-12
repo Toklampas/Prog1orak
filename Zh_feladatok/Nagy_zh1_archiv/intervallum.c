@@ -12,7 +12,7 @@ int interval(int start, int length)
 int main()
 {
     int start, length, min = -1;
-    while (scanf("%d %d", &start, &length) == 2)
+    while (scanf("%d%d", &start, &length) == 2)
         if (interval(start, length) < min || min == -1)
             min = interval(start, length);
     printf("%d", min);
