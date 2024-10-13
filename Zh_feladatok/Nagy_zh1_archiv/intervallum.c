@@ -16,4 +16,5 @@ int main()
         if (interval(start, length) < min || min == -1)
             min = interval(start, length);
     printf("%d", min);
+    return 0;
 }
