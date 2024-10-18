@@ -51,6 +51,7 @@ void timereset(time *p)
     (*p).sec = 0; 
 }
 
+//main a teszteleshez
 int main(void)
 {
     time workout_begins = {23, 15, 0};
