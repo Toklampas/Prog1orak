@@ -25,4 +25,4 @@ int main()
     char str[]="uborkaleves";
     int a = count_vowels(str);
     return 0;
-}
+}   
