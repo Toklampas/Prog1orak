@@ -3,17 +3,6 @@
 	
 enum { BUFFERSIZE = 128 };
 
-int main(void) {
-	char buffer[BUFFERSIZE], *c;
-	fgets(buffer, BUFFERSIZE, stdin);   // read from stdin until newline
-	c = strchr(buffer, '\n');           // replace newline with '\0'
-	if (c != NULL)
-		*c = '\0';
-	reverse_words(buffer);              // call user function
-	printf("%s", buffer);               // print the modified string
-	return 0;
-}
-
 void reverse_words(char str[])
 {
     int i = 0, start = 0;
@@ -34,4 +23,15 @@ void reverse_words(char str[])
             start = i+1;
         }
     }
+}
+
+int main(void) {
+	char buffer[BUFFERSIZE], *c;
+	fgets(buffer, BUFFERSIZE, stdin);   // read from stdin until newline
+	c = strchr(buffer, '\n');           // replace newline with '\0'
+	if (c != NULL)
+		*c = '\0';
+	reverse_words(buffer);              // call user function
+	printf("%s", buffer);               // print the modified string
+	return 0;
 }
