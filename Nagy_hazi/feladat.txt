@@ -1,0 +1,11 @@
+Egy szöveges fájl a legósdobozban tárolt alkatrészek katalógusát tartalmazza, minden sora egy alkatrész azonosítóját és darabszámát
+
+4515374/60481 6 db
+
+Egy másik szöveges fájl lego készleteket tárol, minden készletet három sorban, az alábbi szerkezet szerint
+
+1 .sor: készlet neve: pl. NASA Apollo 11 holdkomp
+2. sor: készlet építőelemei: pl. 4515374/60481 6 db 4515323/60412 3 db ... stb
+3. sor: készlet ára
+
+Írjon programot, mely kilistázza, hogy melyik az a legdrágább készlet, mely a legósdobozban tárolt elemekből kirakható.
