@@ -61,7 +61,7 @@ big_number_t add (big_number_t a, big_number_t b)
         if (i < b.length)
             byteB = b.number[i];
         //ket bajt osszead, plusz az atvitel ha van
-        unsigned sum = byteA + byteB + carry;
+        sum = byteA + byteB + carry;
         //mennyi marad kimenetnek, ha levonjuk azt amit majd atviszunk
         out.number[i] = sum % 256;
         //mennyi lesz at atvitel erteke (hanyszor eri el a 256ot)
@@ -76,11 +76,32 @@ big_number_t add (big_number_t a, big_number_t b)
     return out;
 }
 
-int main()
-{
-    big_number_t a = create("ff01");
-    char* sumStr = tostring(a);
-    destroy(&a);
-    free (sumStr);
+int main() {
+    // Tesztadatok
+    char* hex_numbers[] = {"01", "FF", "0102", "FFFF", "12345678", "ABCDEF"};
+    int test_count = sizeof(hex_numbers) / sizeof(hex_numbers[0]);
+
+    // Minden teszthez lefut a create, tostring és destroy függvény
+    for (int i = 0; i < test_count; i++) {
+        printf("Teszt %d: %s\n", i + 1, hex_numbers[i]);
+
+        // Hozzuk létre a big_number_t struktúrát a create függvénnyel
+        big_number_t num = create(hex_numbers[i]);
+
+        // Alakítsuk vissza stringgé a tostring függvénnyel
+        char* hex_str = tostring(num);
+
+        // Ellenőrizzük az eredményt
+        printf("Eredeti hex: %s, Átalakítva: %s\n", hex_numbers[i], hex_str);
+
+        // Felszabadítjuk a big_number_t struktúrát
+        destroy(&num);
+
+        // Felszabadítjuk a hexadecimális stringet
+        free(hex_str);
+
+        printf("\n");
+    }
+
     return 0;
 }
