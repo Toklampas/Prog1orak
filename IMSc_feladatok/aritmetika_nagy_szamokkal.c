@@ -51,7 +51,7 @@ big_number_t add (big_number_t a, big_number_t b)
         out.length = b.length + 1;
     out.number = (unsigned char*)calloc(out.length, sizeof(unsigned char));
     unsigned carry = 0;
-    for (int i = 0; i < out.length; i++)
+    for (int i = 0; i < out.length-1; i++)
     {
         //megkeressuk hogy melyik ket bajtot kell osszeadni lepesenkent,
         //ha valamelyik szam rovidebb, ahelyett 0-t veszunk
@@ -68,40 +68,22 @@ big_number_t add (big_number_t a, big_number_t b)
         carry = sum / 256;
     }
     //ha volt atvitel, berakjuk a szam vegere
+    out.number[out.length-1] = carry;
     //ha nem volt atvitel, csokkenthetjuk 1-el a kimenet hosszat
-    if (carry > 0)
-        out.number[out.length] = carry;
-    else
+    if (carry == 0)
+    {
         out.length -= 1;
+        out.number = realloc(out.number, out.length);
+    }
     return out;
 }
 
-int main() {
-    // Tesztadatok
-    char* hex_numbers[] = {"01", "FF", "0102", "FFFF", "12345678", "ABCDEF"};
-    int test_count = sizeof(hex_numbers) / sizeof(hex_numbers[0]);
-
-    // Minden teszthez lefut a create, tostring és destroy függvény
-    for (int i = 0; i < test_count; i++) {
-        printf("Teszt %d: %s\n", i + 1, hex_numbers[i]);
-
-        // Hozzuk létre a big_number_t struktúrát a create függvénnyel
-        big_number_t num = create(hex_numbers[i]);
-
-        // Alakítsuk vissza stringgé a tostring függvénnyel
-        char* hex_str = tostring(num);
-
-        // Ellenőrizzük az eredményt
-        printf("Eredeti hex: %s, Átalakítva: %s\n", hex_numbers[i], hex_str);
-
-        // Felszabadítjuk a big_number_t struktúrát
-        destroy(&num);
-
-        // Felszabadítjuk a hexadecimális stringet
-        free(hex_str);
-
-        printf("\n");
-    }
-
+int main()
+{
+    big_number_t a = create("1");
+    big_number_t b = create("1");
+    big_number_t c = add(a, b);
+    char* result = tostring(c);
+    printf("%s\n", result);
     return 0;
 }
