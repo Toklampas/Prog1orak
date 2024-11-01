@@ -50,9 +50,29 @@ big_number_t add (big_number_t a, big_number_t b)
     else
         out.length = b.length + 1;
     out.number = (unsigned char*)calloc(out.length, sizeof(unsigned char));
+    unsigned carry = 0;
     for (int i = 0; i < out.length; i++)
     {
+        //megkeressuk hogy melyik ket bajtot kell osszeadni lepesenkent,
+        //ha valamelyik szam rovidebb, ahelyett 0-t veszunk
+        unsigned byteA = 0, byteB = 0, sum = 0;
+        if (i < a.length)
+            byteA = a.number[i];
+        if (i < b.length)
+            byteB = b.number[i];
+        //ket bajt osszead, plusz az atvitel ha van
+        unsigned sum = byteA + byteB + carry;
+        //mennyi marad kimenetnek, ha levonjuk azt amit majd atviszunk
+        out.number[i] = sum % 256;
+        //mennyi lesz at atvitel erteke (hanyszor eri el a 256ot)
+        carry = sum / 256;
     }
+    //ha volt atvitel, berakjuk a szam vegere
+    //ha nem volt atvitel, csokkenthetjuk 1-el a kimenet hosszat
+    if (carry > 0)
+        out.number[out.length] = carry;
+    else
+        out.length -= 1;
     return out;
 }
 
