@@ -24,7 +24,7 @@ char *tostring(big_number_t input)
     //minden bajt ket karakter, plusz 1 a lezaro 0 miatt
     char* str = (char*)calloc(input.length * 2 + 1, sizeof(char));
     for (int i = 0; i < input.length; i++)
-        //str-ben kettesevel lepunk, inputon forditott sorrendben megyunk vegig
+        //str-ben kettesevel haladunk, inputon forditott sorrendben megyunk vegig
         sprintf(&str[i * 2], "%2x", input.number[input.length - 1 - i]);
     return str;
 }
@@ -40,6 +40,7 @@ int main()
 {
     big_number_t a = create("ff01");
     char* sumStr = tostring(a);
+    destroy(&a);
     free (sumStr);
     return 0;
 }
