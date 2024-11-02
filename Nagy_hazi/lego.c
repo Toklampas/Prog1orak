@@ -3,13 +3,13 @@
 #include <string.h>
 
 typedef struct {
-    char id[20];
+    char id[15];
     int darab;
 } alkatresz;
 
 typedef struct {
     char nev[150];
-    alkatresz alkatreszek[500];
+    alkatresz *alkatreszek;
     int ar;
 } keszlet;
 
@@ -23,4 +23,12 @@ int doboz_beolvas(alkatresz *elemek, char *fajlnev)
         i++;
     fclose(doboz_fajl);
     return i;
+}
+
+int keszlet_beolvas(keszlet *keszletek, char *fajlnev)
+{
+    FILE *keszlet_fajl = fopen(fajlnev, "r");
+    if (keszlet_fajl == NULL)
+        return -1;
+    
 }
