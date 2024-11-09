@@ -1,0 +1,28 @@
+BANK
+	Elarultattam?
+
+TIBORC
+	En Tiborc vagyok, kegyes nagyur - no, lam!
+
+BANK
+	Tiborc - (Gondolkodva jarkal).
+
+TIBORC
+	Igen - mert szolni kellenek
+	Nagy dolgokat -
+
+BANK
+	Melindarol?
+
+TIBORC
+	Nem arrol.
+
+BANK
+	Nem!
+
+TIBORC
+	Lopni jottem ide; mivel a szegeny
+	Anya s gyermekek velem - (Elfojtodik.)
+
+BANK
+	No jol van - ugy.
