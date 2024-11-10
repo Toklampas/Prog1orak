@@ -4,17 +4,17 @@
 
 typedef struct {
     char id[15];
-    int darab;
+    unsigned darab;
 } alkatresz_t;
 
 typedef struct {
     char nev[150];
     alkatresz_t alkatreszek[1500];
-    int alkatreszfajta_darab;
-    int ar;
+    unsigned alkatreszfajta_darab;
+    unsigned ar;
 } keszlet_t;
 
-alkatresz_t* doboz_beolvas(char *fajlnev, int *n)
+alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
 {
     *n = 0;
     char sor[50];
@@ -44,7 +44,7 @@ alkatresz_t* doboz_beolvas(char *fajlnev, int *n)
     return alkatreszek;
 }
 
-keszlet_t* keszlet_beolvas(char *fajlnev, int *n)
+keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
 {
     *n = 0;
     int i = 0;
@@ -104,7 +104,7 @@ keszlet_t* keszlet_beolvas(char *fajlnev, int *n)
     return keszletek;
 }
 
-int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, int doboz_n)
+int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n)
 {
     int eleg_ez_a_darab = 0;
     for (int i = 0; i < (*keszlet).alkatreszfajta_darab; i++)
@@ -119,9 +119,9 @@ int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, int doboz_n)
     return 1;
 }
 
-keszlet_t *legdragabb_kirakhato_keszlet(keszlet_t *keszletek, int keszletek_n, alkatresz_t *doboz, int doboz_n)
+keszlet_t *legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek_n, alkatresz_t *doboz, unsigned doboz_n)
 {
-    keszlet_t *legdragabb;
+    keszlet_t *legdragabb = NULL;
     int max = 0;
     for (int i = 0; i < keszletek_n; i++)
         if (kirakhato_e(&keszletek[i], doboz, doboz_n)) 
@@ -135,8 +135,8 @@ keszlet_t *legdragabb_kirakhato_keszlet(keszlet_t *keszletek, int keszletek_n, a
 
 int main()
 {
-    int doboz_elemszam;
-    int keszlet_elemszam;
+    unsigned doboz_elemszam;
+    unsigned keszlet_elemszam;
 
     alkatresz_t *doboz_alkatreszek = doboz_beolvas("doboz.txt", &doboz_elemszam);
     if (doboz_alkatreszek == NULL) 
