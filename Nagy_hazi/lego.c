@@ -22,7 +22,10 @@ alkatresz_t* doboz_beolvas(char *fajlnev, int *n)
 
     FILE *doboz_fajl = fopen(fajlnev, "r");
     if (doboz_fajl == NULL)
+    {
+        printf("ERROR: Nem létezik %s nevű fájl a mappában!", fajlnev);
         return NULL;
+    }
 
     while (fgets(sor, 50, doboz_fajl) != 0)
     {
@@ -50,7 +53,10 @@ keszlet_t* keszlet_beolvas(char *fajlnev, int *n)
     
     FILE *keszlet_fajl = fopen(fajlnev, "r");
     if (keszlet_fajl == NULL)
+    {
+        printf("ERROR: Nem létezik %s nevű fájl a mappában!", fajlnev);
         return NULL;
+    }
 
     while (fgets(sor, 1000, keszlet_fajl) != 0)
     {
@@ -119,7 +125,7 @@ keszlet_t *legdragabb_kirakhato_keszlet(keszlet_t *keszletek, int keszletek_n, a
     int max = 0;
     for (int i = 0; i < keszletek_n; i++)
         if (kirakhato_e(&keszletek[i], doboz_alkatreszek, doboz_n)) 
-            if ((*keszletek).ar > max)
+            if (keszletek[i].ar > max)
             {
                 max = keszletek[i].ar;
                 legdragabb = &keszletek[i];
