@@ -72,31 +72,66 @@ keszlet_t* keszlet_beolvas(char *fajlnev, int *n)
         if (fgets(sor, 1000, keszlet_fajl) != 0)
         {
             keszletek[*n].alkatreszfajta_darab = 0;
-            char *alkatresz = strtok(sor, " ");
-            while (alkatresz != NULL && keszletek[*n].alkatreszfajta_darab < 1500)
+            char *string_reszlet = strtok(sor, " ");
+            while (string_reszlet != NULL && keszletek[*n].alkatreszfajta_darab < 1500)
             {
-                
+                strncpy(keszletek[*n].alkatreszek[keszletek[*n].alkatreszfajta_darab].id, string_reszlet, sizeof(keszletek[*n].alkatreszek[keszletek[*n].alkatreszfajta_darab].id));
+                keszletek[*n].alkatreszek[keszletek[*n].alkatreszfajta_darab].id[sizeof(keszletek[*n].alkatreszek[keszletek[*n].alkatreszfajta_darab].id)-1] = '\0';
+                string_reszlet = strtok(NULL, " ");
+                if (string_reszlet != NULL && sscanf(string_reszlet, "%d", &keszletek[*n].alkatreszek[keszletek[*n].alkatreszfajta_darab].darab) == 1)
+                    keszletek[*n].alkatreszfajta_darab++;
+                string_reszlet = strtok(NULL, " ");
+                string_reszlet = strtok(NULL, " ");
             }
         }
         else break;
 
         //ar beolvasasa
         if (fgets(sor, 1000, keszlet_fajl) != 0)
-            sscanf(sor, "%d", keszletek[*n].ar);
+            sscanf(sor, "%d", &keszletek[*n].ar);
         else break;
         (*n)++;
+        fgets(sor, 1000, keszlet_fajl);
 
     }
-
-    
-
     fclose(keszlet_fajl);
     return keszletek;
+}
+
+int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz_alkatreszek, int doboz_n)
+{
+    int eleg_ez_a_darab = 0;
+    for (int i = 0; i < (*keszlet).alkatreszfajta_darab; i++)
+    {
+        for (int j = 0; j < doboz_n; j++)
+            if (strcmp((*keszlet).alkatreszek[i].id, doboz_alkatreszek[j].id) == 0)
+                if (doboz_alkatreszek[j].darab >= (*keszlet).alkatreszek[i].darab)
+                    eleg_ez_a_darab = 1;
+        if (!eleg_ez_a_darab)
+            return 0;
+    }
+    return 1;
+}
+
+keszlet_t *legdragabb_kirakhato_keszlet(keszlet_t *keszletek, int keszletek_n, alkatresz_t *doboz_alkatreszek, int doboz_n)
+{
+    keszlet_t *legdragabb;
+    int max = 0;
+    for (int i = 0; i < keszletek_n; i++)
+        if (kirakhato_e(&keszletek[i], doboz_alkatreszek, doboz_n)) 
+            if ((*keszletek).ar > max)
+            {
+                max = keszletek[i].ar;
+                legdragabb = &keszletek[i];
+            }
+    return legdragabb;
 }
 
 int main()
 {
     int doboz_elemszam;
+    int keszlet_elemszam;
     doboz_beolvas("doboz.txt", &doboz_elemszam);
+    keszlet_beolvas("keszletek.txt", &keszlet_elemszam);
     return 0;
 }
