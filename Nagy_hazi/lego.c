@@ -131,7 +131,24 @@ int main()
 {
     int doboz_elemszam;
     int keszlet_elemszam;
-    doboz_beolvas("doboz.txt", &doboz_elemszam);
-    keszlet_beolvas("keszletek.txt", &keszlet_elemszam);
+
+    alkatresz_t *doboz_alkatreszek = doboz_beolvas("doboz.txt", &doboz_elemszam);
+    if (doboz_alkatreszek == NULL) 
+        return 1;
+
+    keszlet_t *keszletek = keszlet_beolvas("keszletek.txt", &keszlet_elemszam);
+    if (keszletek == NULL)
+    {
+        free(doboz_alkatreszek);
+        return 1;
+    }
+
+    keszlet_t *legdragabb_keszlet = legdragabb_kirakhato_keszlet(keszletek, keszlet_elemszam, doboz_alkatreszek, doboz_elemszam);
+    if (legdragabb_keszlet != NULL)
+        printf("A legdrágább kirakható készlet: %s", (*legdragabb_keszlet).nev);
+    else
+        printf("Egyik készlet sem rakható ki a dobozban lévő alkatrészekkel");
+    free(doboz_alkatreszek);
+    free(keszletek);
     return 0;
 }
