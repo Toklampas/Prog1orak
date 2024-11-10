@@ -119,7 +119,7 @@ int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n)
     return 1;
 }
 
-keszlet_t *legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek_n, alkatresz_t *doboz, unsigned doboz_n)
+keszlet_t* legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek_n, alkatresz_t *doboz, unsigned doboz_n)
 {
     keszlet_t *legdragabb = NULL;
     int max = 0;
