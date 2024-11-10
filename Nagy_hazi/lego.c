@@ -104,14 +104,14 @@ keszlet_t* keszlet_beolvas(char *fajlnev, int *n)
     return keszletek;
 }
 
-int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz_alkatreszek, int doboz_n)
+int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, int doboz_n)
 {
     int eleg_ez_a_darab = 0;
     for (int i = 0; i < (*keszlet).alkatreszfajta_darab; i++)
     {
         for (int j = 0; j < doboz_n; j++)
-            if (strcmp((*keszlet).alkatreszek[i].id, doboz_alkatreszek[j].id) == 0)
-                if (doboz_alkatreszek[j].darab >= (*keszlet).alkatreszek[i].darab)
+            if (strcmp((*keszlet).alkatreszek[i].id, doboz[j].id) == 0)
+                if (doboz[j].darab >= (*keszlet).alkatreszek[i].darab)
                     eleg_ez_a_darab = 1;
         if (!eleg_ez_a_darab)
             return 0;
@@ -119,12 +119,12 @@ int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz_alkatreszek, int doboz_n)
     return 1;
 }
 
-keszlet_t *legdragabb_kirakhato_keszlet(keszlet_t *keszletek, int keszletek_n, alkatresz_t *doboz_alkatreszek, int doboz_n)
+keszlet_t *legdragabb_kirakhato_keszlet(keszlet_t *keszletek, int keszletek_n, alkatresz_t *doboz, int doboz_n)
 {
     keszlet_t *legdragabb;
     int max = 0;
     for (int i = 0; i < keszletek_n; i++)
-        if (kirakhato_e(&keszletek[i], doboz_alkatreszek, doboz_n)) 
+        if (kirakhato_e(&keszletek[i], doboz, doboz_n)) 
             if (keszletek[i].ar > max)
             {
                 max = keszletek[i].ar;
