@@ -10,12 +10,13 @@ typedef struct {
 typedef struct {
     char nev[150];
     alkatresz_t alkatreszek[1500];
+    int alkatreszfajta_darab;
     int ar;
 } keszlet_t;
 
-alkatresz_t* doboz_beolvas(char *fajlnev, int *doboz_elemszam)
+alkatresz_t* doboz_beolvas(char *fajlnev, int *n)
 {
-    *doboz_elemszam = 0;
+    *n = 0;
     char sor[50];
     alkatresz_t *alkatreszek = NULL;
 
@@ -25,7 +26,7 @@ alkatresz_t* doboz_beolvas(char *fajlnev, int *doboz_elemszam)
 
     while (fgets(sor, 50, doboz_fajl) != 0)
     {
-        alkatresz_t *uj_alkatreszek = realloc(alkatreszek, (*doboz_elemszam + 1) * sizeof(alkatresz_t));
+        alkatresz_t *uj_alkatreszek = realloc(alkatreszek, (*n + 1) * sizeof(alkatresz_t));
         if (uj_alkatreszek == NULL)
         {
             free(alkatreszek);
@@ -33,17 +34,18 @@ alkatresz_t* doboz_beolvas(char *fajlnev, int *doboz_elemszam)
             return NULL;
         }
         alkatreszek = uj_alkatreszek;
-        if (sscanf(sor, "%s %d db", alkatreszek[*doboz_elemszam].id, &alkatreszek[*doboz_elemszam].darab) == 2)
-            (*doboz_elemszam)++;
+        if (sscanf(sor, "%s %d db", alkatreszek[*n].id, &alkatreszek[*n].darab) == 2)
+            (*n)++;
     }
     fclose(doboz_fajl);
     return alkatreszek;
 }
 
-keszlet_t* keszlet_beolvas(char *fajlnev, int *keszlet_szam)
+keszlet_t* keszlet_beolvas(char *fajlnev, int *n)
 {
-    *keszlet_szam = 0;
-    char sor[1000];
+    *n = 0;
+    int i = 0;
+    char sor[1000], nev[150];
     keszlet_t *keszletek = NULL;
     
     FILE *keszlet_fajl = fopen(fajlnev, "r");
@@ -52,7 +54,7 @@ keszlet_t* keszlet_beolvas(char *fajlnev, int *keszlet_szam)
 
     while (fgets(sor, 1000, keszlet_fajl) != 0)
     {
-        keszlet_t *uj_keszletek = realloc(keszletek, (*keszlet_szam + 1) * sizeof(alkatresz_t));
+        keszlet_t *uj_keszletek = realloc(keszletek, (*n + 1) * sizeof(keszlet_t));
         if (uj_keszletek == NULL)
         {
             free(keszletek);
@@ -60,6 +62,30 @@ keszlet_t* keszlet_beolvas(char *fajlnev, int *keszlet_szam)
             return NULL;
         }
         keszletek = uj_keszletek;
+
+        //nev beolvasasa
+        strncpy(keszletek[*n].nev, sor, 150);
+        keszletek[*n].nev[sizeof(keszletek[*n].nev) - 1] = '\0';
+
+        //epitoelemek beolvasasa
+        keszlet_t *k = &keszletek[*n];
+        if (fgets(sor, 1000, keszlet_fajl) != 0)
+        {
+            keszletek[*n].alkatreszfajta_darab = 0;
+            char *alkatresz = strtok(sor, " ");
+            while (alkatresz != NULL && keszletek[*n].alkatreszfajta_darab < 1500)
+            {
+                
+            }
+        }
+        else break;
+
+        //ar beolvasasa
+        if (fgets(sor, 1000, keszlet_fajl) != 0)
+            sscanf(sor, "%d", keszletek[*n].ar);
+        else break;
+        (*n)++;
+
     }
 
     
