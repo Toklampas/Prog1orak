@@ -10,8 +10,7 @@ double convert_temperature(double F)
 void convert_date(char *input_date, char *output_date)
 {
     int day, month, year, sec, min, hour;
-    sscanf(input_date, "%2d/%2d/%4d", &month, &day, &year);
-    sscanf(input_date, "%2d:%2d:%2d", &hour, &min, &sec);
+    sscanf(input_date, "%d/%d/%d %d:%d:%d", &day, &month, &year, &hour, &min, &sec);
     sprintf(output_date, "%04d.%02d.%02d %02d.%02d.%02d", year, month, day, hour, min, sec);
     return;
 }
@@ -32,7 +31,7 @@ int main()
         if (strncmp(line, "MEASUREMENT_TIME", sizeof("MEASUREMENT_TIME")-1) == 0)
         {
             char old_date[20], new_date[20];
-            sscanf(line + sizeof("MEASUREMENT_TIME"), "%s", old_date);
+            sscanf(line, "MEASUREMENT_TIME %[^\n]", old_date);
             convert_date(old_date, new_date);
             fprintf(output_file, "MERESI_IDO %s\n", new_date);
         }
