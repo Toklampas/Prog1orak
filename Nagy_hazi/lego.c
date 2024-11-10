@@ -33,11 +33,9 @@ alkatresz_t* doboz_beolvas(char *fajlnev, int *doboz_elemszam)
             return NULL;
         }
         alkatreszek = uj_alkatreszek;
+        if (sscanf(sor, "%s %d db", alkatreszek[*doboz_elemszam].id, &alkatreszek[*doboz_elemszam].darab) == 2)
+            (*doboz_elemszam)++;
     }
-
-    if (sscanf(sor, "%s %d db", alkatreszek[*doboz_elemszam].id, &alkatreszek[*doboz_elemszam].darab) == 2)
-        (*doboz_elemszam)++;
-
     fclose(doboz_fajl);
     return alkatreszek;
 }
@@ -52,8 +50,27 @@ keszlet_t* keszlet_beolvas(char *fajlnev, int *keszlet_szam)
     if (keszlet_fajl == NULL)
         return NULL;
 
+    while (fgets(sor, 1000, keszlet_fajl) != 0)
+    {
+        keszlet_t *uj_keszletek = realloc(keszletek, (*keszlet_szam + 1) * sizeof(alkatresz_t));
+        if (uj_keszletek == NULL)
+        {
+            free(keszletek);
+            fclose(keszlet_fajl);
+            return NULL;
+        }
+        keszletek = uj_keszletek;
+    }
+
     
 
-    fclose(keszlet_fajl)
+    fclose(keszlet_fajl);
     return keszletek;
+}
+
+int main()
+{
+    int doboz_elemszam;
+    doboz_beolvas("doboz.txt", &doboz_elemszam);
+    return 0;
 }
