@@ -5,30 +5,55 @@
 typedef struct {
     char id[15];
     int darab;
-} alkatresz;
+} alkatresz_t;
 
 typedef struct {
     char nev[150];
-    alkatresz *alkatreszek;
+    alkatresz_t alkatreszek[1500];
     int ar;
-} keszlet;
+} keszlet_t;
 
-int doboz_beolvas(alkatresz *elemek, char *fajlnev)
+alkatresz_t* doboz_beolvas(char *fajlnev, int *doboz_elemszam)
 {
+    *doboz_elemszam = 0;
+    char sor[50];
+    alkatresz_t *alkatreszek = NULL;
+
     FILE *doboz_fajl = fopen(fajlnev, "r");
     if (doboz_fajl == NULL)
-        return -1;
-    int i = 0;
-    while (fscanf(doboz_fajl, "%s%ddb", elemek[i].id, &elemek[i].darab) == 2)
-        i++;
+        return NULL;
+
+    while (fgets(sor, 50, doboz_fajl) != 0)
+    {
+        alkatresz_t *uj_alkatreszek = realloc(alkatreszek, (*doboz_elemszam + 1) * sizeof(alkatresz_t));
+        if (uj_alkatreszek == NULL)
+        {
+            free(alkatreszek);
+            fclose(doboz_fajl);
+            return NULL;
+        }
+        alkatreszek = uj_alkatreszek;
+    }
+
+    if (sscanf(sor, "%s %d db", alkatreszek[*doboz_elemszam].id, &alkatreszek[*doboz_elemszam].darab) == 2)
+        (*doboz_elemszam)++;
+
     fclose(doboz_fajl);
-    return i;
+    return alkatreszek;
 }
 
-int keszlet_beolvas(keszlet *keszletek, char *fajlnev)
+keszlet_t* keszlet_beolvas(char *fajlnev, int *keszlet_szam)
 {
+    *keszlet_szam = 0;
+    char sor[1000];
+    keszlet_t *keszletek = NULL;
+    
     FILE *keszlet_fajl = fopen(fajlnev, "r");
     if (keszlet_fajl == NULL)
-        return -1;
+        return NULL;
+
     
+
+    fclose(keszlet_fajl)
+    return keszletek;
 }
