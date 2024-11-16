@@ -2,14 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct {
+typedef struct alkatresz_t {
     char id[15];
     unsigned darab;
+    struct alkatresz_t *next;
 } alkatresz_t;
 
 typedef struct {
     char nev[150];
-    alkatresz_t alkatreszek[1500];
+    alkatresz_t *alkatreszek;
     unsigned alkatreszfajta_darab;
     unsigned ar;
 } keszlet_t;
