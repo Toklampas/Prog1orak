@@ -127,9 +127,10 @@ keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
         jelenlegi_keszlet->alkatreszek = NULL;
         jelenlegi_keszlet->alkatreszfajta_darab = 0;
 
-        //nev beolvasasa
+        //nev beolvasasa, sor atmasolasa a nevbe
         strncpy(jelenlegi_keszlet->nev, sor, 150);
-        jelenlegi_keszlet->nev[sizeof(jelenlegi_keszlet->nev) - 1] = '\0';
+        //a nev str vegi uj sor karakter atalakitasa lezaro nullara
+        *strchr(jelenlegi_keszlet->nev, '\n') = '\0';
 
         //epitoelemek beolvasasa
         if (fgets(sor, 1000, keszlet_fajl) != NULL)
@@ -186,7 +187,7 @@ int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n)
         int eleg_ez_a_darab = 0;
         for (alkatresz_t *doboz_alkatresz = doboz; doboz_alkatresz != NULL; doboz_alkatresz = doboz_alkatresz->next)
         {
-            printf("Comparing part %s, needed: %u with part %s, available: %u\n", jelenlegi_alkatresz->id, jelenlegi_alkatresz->darab, doboz_alkatresz->id, doboz_alkatresz->darab);
+            //printf("DEBUG: Comparing part %s, needed: %u with part %s, available: %u\n", jelenlegi_alkatresz->id, jelenlegi_alkatresz->darab, doboz_alkatresz->id, doboz_alkatresz->darab);
             if (strcmp(jelenlegi_alkatresz->id, doboz_alkatresz->id) == 0)
             {
                 if (doboz_alkatresz->darab >= jelenlegi_alkatresz->darab)
@@ -198,7 +199,7 @@ int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n)
         }
         if (!eleg_ez_a_darab)
         {
-            printf("Nem található elég %s alkatrész a dobozban\n", jelenlegi_alkatresz->id);
+            //printf("DEBUG: Nem található elég %s alkatrész a dobozban\n", jelenlegi_alkatresz->id);
             return 0;
         }
     }
@@ -217,7 +218,7 @@ keszlet_t* legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek
                 legdragabb = &keszletek[i];
             }
         else
-            printf("A %s készlet nem rakható ki a dobozban lévő alkatrészekkel\n", keszletek[i].nev);
+            //printf("DEBUG: A %s készlet nem rakható ki a dobozban lévő alkatrészekkel\n", keszletek[i].nev);
     return legdragabb;
 }
 
