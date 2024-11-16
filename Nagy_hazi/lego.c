@@ -184,13 +184,18 @@ int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n)
     for (alkatresz_t *jelenlegi_alkatresz = keszlet->alkatreszek; jelenlegi_alkatresz != NULL; jelenlegi_alkatresz = jelenlegi_alkatresz->next)
     {
         int eleg_ez_a_darab = 0;
-        for (int j = 0; j < doboz_n; j++)
-            if (strcmp(jelenlegi_alkatresz->id, doboz[j].id) == 0)
-                if (doboz[j].darab >= jelenlegi_alkatresz->darab)
+        for (alkatresz_t *doboz_alkatresz = doboz; doboz_alkatresz != NULL; doboz_alkatresz = doboz_alkatresz->next)
+        {
+            printf("Comparing part %s, needed: %u with part %s, available: %u\n", jelenlegi_alkatresz->id, jelenlegi_alkatresz->darab, doboz_alkatresz->id, doboz_alkatresz->darab);
+            if (strcmp(jelenlegi_alkatresz->id, doboz_alkatresz->id) == 0)
+            {
+                if (doboz_alkatresz->darab >= jelenlegi_alkatresz->darab)
                 {
                     eleg_ez_a_darab = 1;
                     break;
                 }
+            }
+        }
         if (!eleg_ez_a_darab)
         {
             printf("Nem található elég %s alkatrész a dobozban\n", jelenlegi_alkatresz->id);
