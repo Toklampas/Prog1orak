@@ -48,7 +48,7 @@ void insert_movie(listelem *head, char *title, double popularity)
 
 
 
-//teszteles
+//teszteleshez csak
 int main() {
     listelem *head = (listelem *)malloc(sizeof(listelem));
     head->next = NULL;
