@@ -1,3 +1,45 @@
+/*
+Egy szöveges fájl a legósdobozban tárolt alkatrészek katalógusát tartalmazza, minden sora egy 
+alkatrész azonosítóját és darabszámát 
+Példa: 
+4515374/60481 6 db 
+4515323/60412 10 db 
+4530042/60117 5 db 
+4523109/60589 15 db 
+4537118/60600 7 db 
+4529082/60533 20 db 
+Egy másik szöveges fájl lego készleteket tárol, minden készletet három sorban, az alábbi 
+szerkezet szerint. A készleteket egymástól egy üres sor választja el. 
+1. sor: készlet neve: pl. NASA Apollo 11 holdkomp 
+2. sor: készlet építőelemei: pl. 4515374/60481 6 db 4515323/60412 3 db ... stb. 
+3. sor: készlet ára pl. 25000 
+A program kiírja, hogy melyik az a legdrágább készlet, mely a legósdobozban tárolt elemekből 
+kirakható.
+
+
+A kitűzött feladattal kapcsolatban az alábbiakat várjuk el:
+
+Kell, hogy szerepeljen benne szöveges fájlkezelés
+Kell, hogy szerepeljen benne dinamikus adatszerkezet
+Kell, hogy szerepeljen benne sztringfeldolgozás
+Az elvárásoknak tipikusan jól megfelelnek olyan jellegű feladatok, melyek
+szöveges fájlokból adatokat olvasnak be
+azokat dinamikus adatszerkezetben tárolják
+majd egy adott kérdés megválaszolásához a tárolt adatsorokat többször be kell járniuk.
+
+A fájlokat csak egyszer olvashatja végig a program beolvasó rutinja,
+Az adatok feldolgozása szekvenciálisan történjen,
+A fájlok méretét nem szabad az operációs rendszer segítségével lekérdezni és felhasználni,
+A feldolgozandó adatok egy részét vagy egészét, az adatok közti kapcsolatoknak megfelelően egy összetettebb dinamikus adatszerkezetben, a memóriában kell tárolni (a dinamikusan nyújtózkodó tömböt nem fogadjuk el dinamikus adatszerkezetként)
+Az adatszerkezetben ne legyenek többszörösen tárolt adatok
+A dinamikus adatszerkezetet úgy kell megtervezni, hogy azon a végeredmény kiszámításhoz használt algoritmus hatékonyan működjön (vagyis a teljesen általános, mindent egyetlen univerzális adattípusban tároló megoldás nem elfogadott),
+Törekedni kell a program megfelelő szintű dekompozíciójára (függvényekre bontás)
+A programban figyelni kell a memóriagazdálkodásra (ne szivárogjon a memória)
+A programnak nem csak egyetlen adatsoron kell jól működnie
+A teszteléshez természetesen nem kell valóságos adatsorokat felhasználni, hanem olyan tesztadatokat találjunk ki és használjunk, amiken megmutatható, hogy nem csak a kézenfekvő esetekben működik helyesen a program
+A tesztadatokat tartalmazó fájlok elkészítése is része a feladatnak.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -76,14 +118,6 @@ keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
         keszlet_t *uj_keszletek = realloc(keszletek, (*n + 1) * sizeof(keszlet_t));
         if (uj_keszletek == NULL)
         {
-            for (int i = 0; i < keszlet_elemszam; i++) {
-                alkatresz_t *current = keszletek[i].alkatreszek;
-                while (current != NULL) {
-                    alkatresz_t *temp = current;
-                    current = current->next;
-                    free(temp);
-                }
-            }
             free(keszletek);
             fclose(keszlet_fajl);
             return NULL;
@@ -147,18 +181,21 @@ keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
 
 int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n)
 {
-    for (; keszlet->alkatreszek != NULL; keszlet->alkatreszek = keszlet->alkatreszek->next)
+    for (alkatresz_t *jelenlegi_alkatresz = keszlet->alkatreszek; jelenlegi_alkatresz != NULL; jelenlegi_alkatresz = jelenlegi_alkatresz->next)
     {
         int eleg_ez_a_darab = 0;
         for (int j = 0; j < doboz_n; j++)
-            if (strcmp(keszlet->alkatreszek->id, doboz[j].id) == 0)
-                if (doboz[j].darab >= keszlet->alkatreszek->darab)
+            if (strcmp(jelenlegi_alkatresz->id, doboz[j].id) == 0)
+                if (doboz[j].darab >= jelenlegi_alkatresz->darab)
                 {
                     eleg_ez_a_darab = 1;
                     break;
                 }
         if (!eleg_ez_a_darab)
+        {
+            printf("Nem található elég %s alkatrész a dobozban\n", jelenlegi_alkatresz->id);
             return 0;
+        }
     }
     return 1;
 }
@@ -174,6 +211,8 @@ keszlet_t* legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek
                 max = keszletek[i].ar;
                 legdragabb = &keszletek[i];
             }
+        else
+            printf("A %s készlet nem rakható ki a dobozban lévő alkatrészekkel\n", keszletek[i].nev);
     return legdragabb;
 }
 
