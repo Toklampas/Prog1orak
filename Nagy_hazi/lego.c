@@ -226,12 +226,19 @@ int main()
 {
     unsigned doboz_elemszam;
     unsigned keszlet_elemszam;
+    char doboz_fajlnev[100];
+    char keszlet_fajlnev[100];
 
-    alkatresz_t *doboz_alkatreszek = doboz_beolvas("doboz.txt", &doboz_elemszam);
+    printf("Add meg a doboz fájl nevét (pl. doboz.txt): ");
+    scanf("%s", doboz_fajlnev);
+    printf("Add meg a készletek fájl nevét (pl. keszletek.txt): ");
+    scanf("%s", keszlet_fajlnev);
+
+    alkatresz_t *doboz_alkatreszek = doboz_beolvas(doboz_fajlnev, &doboz_elemszam);
     if (doboz_alkatreszek == NULL) 
         return 1;
 
-    keszlet_t *keszletek = keszlet_beolvas("keszletek.txt", &keszlet_elemszam);
+    keszlet_t *keszletek = keszlet_beolvas(keszlet_fajlnev, &keszlet_elemszam);
     if (keszletek == NULL)
     {
         alkatresz_t *temp;
