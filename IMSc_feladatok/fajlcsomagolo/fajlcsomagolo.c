@@ -111,7 +111,7 @@ void list_files(char *packed_file)
         }
 
         char *unit;
-        double size = catalog.entries[i].size;
+        unsigned long size = catalog.entries[i].size;
         if (size >= (1 << 30))
         {
             unit = "GiB";
@@ -132,7 +132,7 @@ void list_files(char *packed_file)
             unit = "B";
         }
 
-        printf("%s (%.0f %s)\n", catalog.entries[i].name, size, unit);
+        printf("%s (%d %s)\n", catalog.entries[i].name, size, unit);
     }
     
     free(catalog.entries);
