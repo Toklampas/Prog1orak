@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdint.h>
 
 typedef struct {
     unsigned size; //4 byte
@@ -44,17 +43,16 @@ void pack_files(char *packed_file, int file_count, char *file_names[])
         fclose(output);
         return;
     }
+
     catalog.entries = malloc(file_count * sizeof(FileEntry));
-    if (!catalog.entries)
+    if (catalog.entries == NULL)
     {
         fclose(output);
         return;
     }
 
     fwrite(&catalog.file_count, sizeof(catalog.file_count), 1, output);
-            free(catalog.entries);
-            fclose(output);
-            return;
+
     for (int i = 0; i < file_count; i++)
     {
         FILE *input = fopen(file_names[i], "rb");
@@ -68,6 +66,15 @@ void pack_files(char *packed_file, int file_count, char *file_names[])
         fwrite(&catalog.entries[i].size, sizeof(catalog.entries[i].size), 1, output);
         fwrite(catalog.entries[i].name, strlen(catalog.entries[i].name) + 1, 1, output);
 
+        fclose(input);
+    }
+
+    for (int i = 0; i < file_count; i++)
+    {
+        FILE *input = fopen(file_names[i], "rb");
+        if (!input)
+            continue;
+        
         char *buffer = malloc(catalog.entries[i].size);
         fread(buffer, 1, catalog.entries[i].size, input);
         fwrite(buffer, 1, catalog.entries[i].size, output);
@@ -94,7 +101,14 @@ void list_files(char *packed_file)
     for (int i = 0; i < catalog.file_count; i++)
     {
         fread(&catalog.entries[i].size, sizeof(catalog.entries[i].size), 1, input);
-        fread(catalog.entries[i].name, 1, 256, input);
+        int j = 0;
+        while (j < 256)
+        {
+            fread(&catalog.entries[i].name[j], 1, 1, input);
+            if (catalog.entries[i].name[j] == '\0')
+                break;
+            j++;
+        }
 
         char *unit;
         double size = catalog.entries[i].size;
@@ -139,8 +153,17 @@ void unpack_files(char *packed_file, int file_count, char *file_names[])
     for (int i = 0; i < catalog.file_count; i++)
     {
         fread(&catalog.entries[i].size, sizeof(catalog.entries[i].size), 1, input);
-        fread(catalog.entries[i].name, 1, 256, input);
+        int j = 0;
+        while (j < 256)
+        {
+            fread(&catalog.entries[i].name[j], 1, 1, input);
+            if (catalog.entries[i].name[j] == '\0')
+                break;
+            j++;
+        }
     }
+
+    int *unpacked = calloc(catalog.file_count, sizeof(int));
 
     for (int i = 0; i < catalog.file_count; i++)
     {
@@ -163,7 +186,12 @@ void unpack_files(char *packed_file, int file_count, char *file_names[])
             fwrite(buffer, 1, catalog.entries[i].size, output);
 
             free(buffer);
-            fclose(output);   
+            fclose(output);
+            unpacked[i] = 1;   
+        }
+        else
+        {
+            fseek(input, catalog.entries[i].size, SEEK_CUR);
         }
     }
 
@@ -187,7 +215,6 @@ void unpack_files(char *packed_file, int file_count, char *file_names[])
 }
 
 
-/*
 int main(int argc, char *argv[])
 {
     if (argc < 2)
@@ -229,6 +256,17 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    return 0;
+}
+
+
+
+/*
+int main()
+{
+    //pack_files("tesztpak.packed", 2, (char *[]){"test1.txt", "test2.txt"});
+    //list_files("tesztpak.packed");
+    //unpack_files("test.packed", 1, (char *[]){"test2.txt"});
     return 0;
 }
 */
