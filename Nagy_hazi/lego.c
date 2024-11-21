@@ -263,7 +263,11 @@ keszlet_t* legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek
     return legdragabb;
 }
 
-int main()
+
+//A főprogram
+//Bekéri a doboz és a készletek fájl nevét, majd beolvassa őket
+//Ezutan meghívja a legdrágább kirakható készletet kereső függvényt és kiírja az eredményt
+int main(void)
 {
     unsigned doboz_elemszam;
     unsigned keszlet_elemszam;
