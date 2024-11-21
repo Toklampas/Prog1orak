@@ -44,25 +44,33 @@ A tesztadatokat tartalmazó fájlok elkészítése is része a feladatnak.
 #include <stdlib.h>
 #include <string.h>
 
+
+//Egy alkatrész adatait tároló struktúra
 typedef struct alkatresz_t {
-    char id[15];
-    unsigned darab;
-    struct alkatresz_t *next;
+    char id[15]; //Az alkatrész egyedi azonosítója
+    unsigned darab; //Az adott alkatrészből hány darab van a dobozban
+    struct alkatresz_t *next; //A láncolt lista következő alkatrészére mutató pointer
 } alkatresz_t;
 
+//Egy készlet adatait tároló struktúra
 typedef struct {
-    char nev[150];
-    alkatresz_t *alkatreszek;
-    unsigned alkatreszfajta_darab;
-    unsigned ar;
+    char nev[150]; //A készlet neve
+    alkatresz_t *alkatreszek; //Az alkatrészek listája, amelyekből a készlet áll
+    unsigned alkatreszfajta_darab; //Az alkatrészek listájának elemszáma
+    unsigned ar; //A készlet ára
 } keszlet_t;
 
+
+//Ez a függvény beolvassa a dobozban lévő alkatrészeket egy fájlból és visszaadja őket egy láncolt listában
+//Bemenetnek a fájl nevét és egy pointert adunk meg, ami a beolvasott alkatrésztípusok számát fogja tárolni
 alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
 {
+    //Inicializáljuk a változókat
     *n = 0;
     char sor[50];
     alkatresz_t *alkatreszek = NULL;
 
+    //Fájl megnyitása olvasásra, ha nem sikerül, akkor hibaüzenet és NULL-t ad vissza
     FILE *doboz_fajl = fopen(fajlnev, "r");
     if (doboz_fajl == NULL)
     {
@@ -70,8 +78,11 @@ alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
         return NULL;
     }
 
+    //Soronként beolvassuk a fájlt, amíg van mit
     while (fgets(sor, 50, doboz_fajl) != 0)
     {
+        //Dinamikusan foglalunk egy új alkatrésznek helyet a memóriában
+        //Ha nem sikerül, akkor felszabadítjuk a lista eddigi elemeit, bezárjuk a fájlt és NULL-t adunk vissza
         alkatresz_t *uj_alkatresz = malloc(sizeof(alkatresz_t));
         if (uj_alkatresz == NULL)
         {
@@ -84,6 +95,9 @@ alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
             fclose(doboz_fajl);
             return NULL;
         }
+
+        //A sorból beolvassuk az alkatrész azonosítóját és darabszámát
+        //Ha nem 
         if (sscanf(sor, "%s %d db", uj_alkatresz->id, &uj_alkatresz->darab) == 2)
         {
             uj_alkatresz->next = alkatreszek;
