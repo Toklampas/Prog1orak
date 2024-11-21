@@ -170,13 +170,23 @@ keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
                 string_reszlet = strtok(NULL, " ");
 
                 //Az alkatrész darabszámát beolvassuk a string részletből
+                //Ha nem sikerül, akkor felszabadítjuk az új alkatrészt
                 if (string_reszlet != NULL && sscanf(string_reszlet, "%d", &uj_alkatresz->darab) == 1)
                 {
                     uj_alkatresz->next = jelenlegi_keszlet->alkatreszek;
                     jelenlegi_keszlet->alkatreszek = uj_alkatresz;
                     jelenlegi_keszlet->alkatreszfajta_darab++;
                 }
+                else
+                {
+                    printf("ERROR: Hibás formátum a %s fájl %d. sorában: %s", fajlnev, *n + 1, sor);
+                    free(uj_alkatresz);
+                    continue;
+                }
+
+                //Továbblépünk a következő string részlethez (ami a "db" szó)
                 string_reszlet = strtok(NULL, " ");
+                //Továbblépünk a következő string részlethez (ami az alkatrész azonosítója)
                 string_reszlet = strtok(NULL, " ");
             }
         }
@@ -186,14 +196,21 @@ keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
         if (fgets(sor, 1000, keszlet_fajl) != 0)
             sscanf(sor, "%d", &jelenlegi_keszlet->ar);
         else break;
+        //A készletek tömb elemszámának növelése
         (*n)++;
+        //Üres sor beolvasása, hogy a következő készlethez léphessünk
         fgets(sor, 1000, keszlet_fajl);
 
     }
+
+    //Bezárjuk a fájlt és visszaadjuk a készletek tömbjét
     fclose(keszlet_fajl);
     return keszletek;
 }
 
+//Ez a függvény megvizsgálja, hogy a megadott készlet kirakható-e a dobozban lévő alkatrészekből
+//Bemenetnek a készletet és a dobozban lévő alkatrészeket kapja meg, valamint a dobozban lévő alkatrészek számát
+//Visszatérési értéke 1, ha a készlet kirakható, 0, ha nem
 int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n)
 {
     for (alkatresz_t *jelenlegi_alkatresz = keszlet->alkatreszek; jelenlegi_alkatresz != NULL; jelenlegi_alkatresz = jelenlegi_alkatresz->next)
