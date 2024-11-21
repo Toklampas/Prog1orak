@@ -1,43 +1,21 @@
 /*
-Egy szöveges fájl a legósdobozban tárolt alkatrészek katalógusát tartalmazza, minden sora egy 
-alkatrész azonosítóját és darabszámát 
+Egy szöveges fájl a legósdobozban tárolt alkatrészek katalógusát tartalmazza, minden sora egy alkatrész azonosítóját és darabszámát 
 Példa: 
 4515374/60481 6 db 
 4515323/60412 10 db 
 4530042/60117 5 db 
 4523109/60589 15 db 
 4537118/60600 7 db 
-4529082/60533 20 db 
+4529082/60533 20 db
+
 Egy másik szöveges fájl lego készleteket tárol, minden készletet három sorban, az alábbi 
-szerkezet szerint. A készleteket egymástól egy üres sor választja el. 
+szerkezet szerint. A készleteket egymástól egy üres sor választja el.
 1. sor: készlet neve: pl. NASA Apollo 11 holdkomp 
 2. sor: készlet építőelemei: pl. 4515374/60481 6 db 4515323/60412 3 db ... stb. 
 3. sor: készlet ára pl. 25000 
+
 A program kiírja, hogy melyik az a legdrágább készlet, mely a legósdobozban tárolt elemekből 
 kirakható.
-
-
-A kitűzött feladattal kapcsolatban az alábbiakat várjuk el:
-
-Kell, hogy szerepeljen benne szöveges fájlkezelés
-Kell, hogy szerepeljen benne dinamikus adatszerkezet
-Kell, hogy szerepeljen benne sztringfeldolgozás
-Az elvárásoknak tipikusan jól megfelelnek olyan jellegű feladatok, melyek
-szöveges fájlokból adatokat olvasnak be
-azokat dinamikus adatszerkezetben tárolják
-majd egy adott kérdés megválaszolásához a tárolt adatsorokat többször be kell járniuk.
-
-A fájlokat csak egyszer olvashatja végig a program beolvasó rutinja,
-Az adatok feldolgozása szekvenciálisan történjen,
-A fájlok méretét nem szabad az operációs rendszer segítségével lekérdezni és felhasználni,
-A feldolgozandó adatok egy részét vagy egészét, az adatok közti kapcsolatoknak megfelelően egy összetettebb dinamikus adatszerkezetben, a memóriában kell tárolni (a dinamikusan nyújtózkodó tömböt nem fogadjuk el dinamikus adatszerkezetként)
-Az adatszerkezetben ne legyenek többszörösen tárolt adatok
-A dinamikus adatszerkezetet úgy kell megtervezni, hogy azon a végeredmény kiszámításhoz használt algoritmus hatékonyan működjön (vagyis a teljesen általános, mindent egyetlen univerzális adattípusban tároló megoldás nem elfogadott),
-Törekedni kell a program megfelelő szintű dekompozíciójára (függvényekre bontás)
-A programban figyelni kell a memóriagazdálkodásra (ne szivárogjon a memória)
-A programnak nem csak egyetlen adatsoron kell jól működnie
-A teszteléshez természetesen nem kell valóságos adatsorokat felhasználni, hanem olyan tesztadatokat találjunk ki és használjunk, amiken megmutatható, hogy nem csak a kézenfekvő esetekben működik helyesen a program
-A tesztadatokat tartalmazó fájlok elkészítése is része a feladatnak.
 */
 
 #include <stdio.h>
@@ -110,10 +88,14 @@ alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
             free(uj_alkatresz);
         }
     }
+
+    //Bezárjuk a fájlt és visszaadjuk az alkatrészek listáját
     fclose(doboz_fajl);
     return alkatreszek;
 }
 
+
+//Ez a függvény beolvassa a készleteket egy fájlból és visszaadja őket egy dinamikus tömbben
 keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
 {
     *n = 0;
