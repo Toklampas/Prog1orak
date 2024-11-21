@@ -41,6 +41,7 @@ typedef struct {
 
 //Ez a függvény beolvassa a dobozban lévő alkatrészeket egy fájlból és visszaadja őket egy láncolt listában
 //Bemenetnek a fájl nevét és egy pointert adunk meg, ami a beolvasott alkatrésztípusok számát fogja tárolni
+//Viszatérési értéke az alkatrészek listája, ha sikerült beolvasni, egyébként NULL
 alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
 {
     //Inicializáljuk a változókat
@@ -52,7 +53,7 @@ alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
     FILE *doboz_fajl = fopen(fajlnev, "r");
     if (doboz_fajl == NULL)
     {
-        printf("ERROR: Nem létezik %s nevű fájl a mappában!", fajlnev);
+        printf("\nERROR: Nem létezik \"%s\" nevű fájl a mappában!", fajlnev);
         return NULL;
     }
 
@@ -97,6 +98,7 @@ alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
 
 //Ez a függvény beolvassa a készleteket egy fájlból és visszaadja őket egy dinamikus tömbben
 //Bemenetnek a fájl nevét és egy pointert adunk meg, ami a beolvasott készletek számát fogja tárolni
+//Visszatérési értéke a készletek tömbje, ha sikerült beolvasni, egyébként NULL
 keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
 {
     //Inicializáljuk a változókat
@@ -109,7 +111,7 @@ keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
     FILE *keszlet_fajl = fopen(fajlnev, "r");
     if (keszlet_fajl == NULL)
     {
-        printf("ERROR: Nem létezik %s nevű fájl a mappában!", fajlnev);
+        printf("\nERROR: Nem létezik \"%s\" nevű fájl a mappában!", fajlnev);
         return NULL;
     }
 
@@ -213,12 +215,15 @@ keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
 //Visszatérési értéke 1, ha a készlet kirakható, 0, ha nem
 int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n)
 {
+    //Végigmegyünk az összes alkatrészen a készletben
     for (alkatresz_t *jelenlegi_alkatresz = keszlet->alkatreszek; jelenlegi_alkatresz != NULL; jelenlegi_alkatresz = jelenlegi_alkatresz->next)
     {
         int eleg_ez_a_darab = 0;
+        //Végigmegyünk az összes alkatrészen a dobozban
         for (alkatresz_t *doboz_alkatresz = doboz; doboz_alkatresz != NULL; doboz_alkatresz = doboz_alkatresz->next)
         {
             //printf("DEBUG: Comparing part %s, needed: %u with part %s, available: %u\n", jelenlegi_alkatresz->id, jelenlegi_alkatresz->darab, doboz_alkatresz->id, doboz_alkatresz->darab);
+            //Ha megtaláljuk az alkatrészt a dobozban, akkor megnézzük, hogy elég van-e belőle
             if (strcmp(jelenlegi_alkatresz->id, doboz_alkatresz->id) == 0)
             {
                 if (doboz_alkatresz->darab >= jelenlegi_alkatresz->darab)
@@ -237,10 +242,15 @@ int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n)
     return 1;
 }
 
+//Ez a függvény megkeresi a legdrágább készletet, amely kirakható a dobozban lévő alkatrészekből
+//Bemenetnek a készletek tömbjét, a készletek számát, a dobozban lévő alkatrészeket és a dobozban lévő alkatrészek számát kapja meg
+//Visszatérési értéke a legdrágább készletre mutató pointer, ha van ilyen, egyébként NULL
 keszlet_t* legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek_n, alkatresz_t *doboz, unsigned doboz_n)
 {
     keszlet_t *legdragabb = NULL;
     int max = 0;
+    //Végigmegyünk az összes készleten és megnézzük, hogy kirakható-e a dobozban lévő alkatrészekből
+    //Ha kirakható és az ára nagyobb, mint a jelenlegi maximum, akkor frissítjük a maximumot és a legdrágább készlet pointerét
     for (int i = 0; i < keszletek_n; i++)
         if (kirakhato_e(&keszletek[i], doboz, doboz_n)) 
             if (keszletek[i].ar > max)
