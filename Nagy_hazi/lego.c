@@ -48,7 +48,7 @@ alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
     char sor[50];
     alkatresz_t *alkatreszek = NULL;
 
-    //Fájl megnyitása olvasásra, ha nem sikerül, akkor hibaüzenet és NULL-t ad vissza
+    //A doboz elemeit tartalmazó fájl megnyitása olvasásra, ha nem sikerül, akkor hibaüzenet és NULL-t ad vissza
     FILE *doboz_fajl = fopen(fajlnev, "r");
     if (doboz_fajl == NULL)
     {
@@ -96,13 +96,16 @@ alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
 
 
 //Ez a függvény beolvassa a készleteket egy fájlból és visszaadja őket egy dinamikus tömbben
+//Bemenetnek a fájl nevét és egy pointert adunk meg, ami a beolvasott készletek számát fogja tárolni
 keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
 {
+    //Inicializáljuk a változókat
     *n = 0;
     int i = 0;
     char sor[1000], nev[150];
     keszlet_t *keszletek = NULL;
     
+    //A készletek adatait tartalmazó fájl megnyitása olvasásra, ha nem sikerül, akkor hibaüzenet és NULL-t adunk vissza
     FILE *keszlet_fajl = fopen(fajlnev, "r");
     if (keszlet_fajl == NULL)
     {
@@ -110,8 +113,11 @@ keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
         return NULL;
     }
 
+    //Soronként beolvassuk a fájlt, amíg van mit
     while (fgets(sor, 1000, keszlet_fajl) != 0)
     {
+        //A készletek tömbjét dinamikusan növeljük, hogy elférjen az új készlet
+        //Ha nem sikerül, akkor felszabadítjuk az eddigi készleteket, bezárjuk a fájlt és NULL-t adunk vissza
         keszlet_t *uj_keszletek = realloc(keszletek, (*n + 1) * sizeof(keszlet_t));
         if (uj_keszletek == NULL)
         {
@@ -119,22 +125,28 @@ keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
             fclose(keszlet_fajl);
             return NULL;
         }
-        keszletek = uj_keszletek;
+        else
+            keszletek = uj_keszletek;
+
+        //A jelenleg vizsgált készletre mutató pointer létrehozása, majd inicializálása
         keszlet_t *jelenlegi_keszlet = &keszletek[*n];
         jelenlegi_keszlet->alkatreszek = NULL;
         jelenlegi_keszlet->alkatreszfajta_darab = 0;
 
-        //nev beolvasasa, sor atmasolasa a nevbe
+        //A készlet nevének beolvasása, majd az újsor karakter lecsérése a lezáró nullára
         strncpy(jelenlegi_keszlet->nev, sor, 150);
-        //a nev str vegi uj sor karakter atalakitasa lezaro nullara
         *strchr(jelenlegi_keszlet->nev, '\n') = '\0';
 
-        //epitoelemek beolvasasa
+        //Az alkatrészek beolvasása, amíg van mit
         if (fgets(sor, 1000, keszlet_fajl) != NULL)
         {
+            //Az alkatrészek stringjét szóközöknél elválasztjuk
             char *string_reszlet = strtok(sor, " ");
+
             while (string_reszlet != NULL)
             {
+                //Dinamikusan foglalunk egy új alkatrésznek helyet a memóriában
+                //Ha nem sikerül, akkor felszabadítjuk az eddigi alkatrészeket, a készleteket, bezárjuk a fájlt és NULL-t adunk vissza
                 alkatresz_t *uj_alkatresz = malloc(sizeof(alkatresz_t));
                 if (uj_alkatresz == NULL)
                 {
@@ -150,9 +162,14 @@ keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
                     return NULL;
                 }
 
+                //Az alkatrész azonosítóját beolvassuk a string részletből
                 strncpy(uj_alkatresz->id, string_reszlet, sizeof(uj_alkatresz->id));
                 uj_alkatresz->id[sizeof(uj_alkatresz->id) - 1] = '\0';
+
+                //Továbblépünk a következő string részlethez (ami a darabszám)
                 string_reszlet = strtok(NULL, " ");
+
+                //Az alkatrész darabszámát beolvassuk a string részletből
                 if (string_reszlet != NULL && sscanf(string_reszlet, "%d", &uj_alkatresz->darab) == 1)
                 {
                     uj_alkatresz->next = jelenlegi_keszlet->alkatreszek;
@@ -165,7 +182,7 @@ keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
         }
         else break;
 
-        //ar beolvasasa
+        //A készlet árának beolvasása
         if (fgets(sor, 1000, keszlet_fajl) != 0)
             sscanf(sor, "%d", &jelenlegi_keszlet->ar);
         else break;
