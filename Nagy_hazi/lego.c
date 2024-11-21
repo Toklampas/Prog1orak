@@ -21,7 +21,7 @@ kirakható.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+//#include "debugmalloc.h"
 
 //Egy alkatrész adatait tároló struktúra
 typedef struct alkatresz_t {
@@ -278,9 +278,9 @@ int main(void)
 
     //Bekérjük a fájlneveket
     printf("Add meg a doboz fájl nevét (pl. doboz.txt): ");
-    scanf("%s", doboz_fajlnev);
+    scanf("%99s", doboz_fajlnev);
     printf("Add meg a készletek fájl nevét (pl. keszletek.txt): ");
-    scanf("%s", keszlet_fajlnev);
+    scanf("%99s", keszlet_fajlnev);
 
     //Beolvassuk a fájlokat
     alkatresz_t *doboz_alkatreszek = doboz_beolvas(doboz_fajlnev, &doboz_elemszam);
@@ -305,7 +305,25 @@ int main(void)
         printf("\nA legdrágább kirakható készlet: %s (ára: %dFt)", legdragabb_keszlet->nev, legdragabb_keszlet->ar);
     else
         printf("\nEgyik készlet sem rakható ki a dobozban lévő alkatrészekkel");
-    free(doboz_alkatreszek);
+    
+    // Free the memory allocated for the parts in the sets
+    for (unsigned i = 0; i < keszlet_elemszam; i++) {
+        alkatresz_t *alkatresz = keszletek[i].alkatreszek;
+        while (alkatresz != NULL) {
+            alkatresz_t *temp = alkatresz;
+            alkatresz = alkatresz->next;
+            free(temp);
+        }
+    }
     free(keszletek);
+
+    // Free the memory allocated for the parts in the box
+    alkatresz_t *temp;
+    while (doboz_alkatreszek != NULL) {
+        temp = doboz_alkatreszek;
+        doboz_alkatreszek = doboz_alkatreszek->next;
+        free(temp);
+    }
+
     return 0;
 }
