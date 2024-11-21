@@ -306,8 +306,9 @@ int main(void)
     else
         printf("\nEgyik készlet sem rakható ki a dobozban lévő alkatrészekkel");
     
-    // Free the memory allocated for the parts in the sets
-    for (unsigned i = 0; i < keszlet_elemszam; i++) {
+    //Lefoglalt memóriák felszabadítása
+    for (unsigned i = 0; i < keszlet_elemszam; i++)
+    {
         alkatresz_t *alkatresz = keszletek[i].alkatreszek;
         while (alkatresz != NULL) {
             alkatresz_t *temp = alkatresz;
@@ -317,9 +318,9 @@ int main(void)
     }
     free(keszletek);
 
-    // Free the memory allocated for the parts in the box
     alkatresz_t *temp;
-    while (doboz_alkatreszek != NULL) {
+    while (doboz_alkatreszek != NULL)
+    {
         temp = doboz_alkatreszek;
         doboz_alkatreszek = doboz_alkatreszek->next;
         free(temp);
