@@ -97,7 +97,7 @@ alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
         }
 
         //A sorból beolvassuk az alkatrész azonosítóját és darabszámát
-        //Ha nem 
+        //Ha valami nem stimmel a formátummal, akkor felszabadítjuk az új alkatrészt és folytatjuk a következő sorral
         if (sscanf(sor, "%s %d db", uj_alkatresz->id, &uj_alkatresz->darab) == 2)
         {
             uj_alkatresz->next = alkatreszek;
@@ -106,6 +106,7 @@ alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
         }
         else
         {
+            printf("ERROR: Hibás formátum a %s fájl %d. sorban: %s", fajlnev, *n + 1, sor);
             free(uj_alkatresz);
         }
     }
