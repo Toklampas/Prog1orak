@@ -76,7 +76,7 @@ alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
         }
 
         //A sorból beolvassuk az alkatrész azonosítóját és darabszámát
-        //Ha valami nem stimmel a formátummal, akkor felszabadítjuk az új alkatrészt és folytatjuk a következő sorral
+        //Ha valami nem stimmel a formátummal, akkor felszabadítjuk az új alkatrészt és NULL-t adunk vissza
         if (sscanf(sor, "%s %d db", uj_alkatresz->id, &uj_alkatresz->darab) == 2)
         {
             uj_alkatresz->next = alkatreszek;
@@ -85,8 +85,9 @@ alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
         }
         else
         {
-            printf("ERROR: Hibás formátum a %s fájl %d. sorban: %s", fajlnev, *n + 1, sor);
+            printf("\nERROR: Nem várt formátum a %s fájl %d. sorában: %s", fajlnev, *n + 1, sor);
             free(uj_alkatresz);
+            return NULL;
         }
     }
 
@@ -181,9 +182,9 @@ keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
                 }
                 else
                 {
-                    printf("ERROR: Hibás formátum a %s fájl %d. sorában: %s", fajlnev, *n + 1, sor);
+                    printf("\nERROR: Nem várt formátum a %s fájl %d. sorában: %s", fajlnev, *n + 1, sor);
                     free(uj_alkatresz);
-                    continue;
+                    return NULL;
                 }
 
                 //Továbblépünk a következő string részlethez (ami a "db" szó)
@@ -269,16 +270,19 @@ keszlet_t* legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek
 //Ezutan meghívja a legdrágább kirakható készletet kereső függvényt és kiírja az eredményt
 int main(void)
 {
+    //A változók inicializálása
     unsigned doboz_elemszam;
     unsigned keszlet_elemszam;
     char doboz_fajlnev[100];
     char keszlet_fajlnev[100];
 
+    //Bekérjük a fájlneveket
     printf("Add meg a doboz fájl nevét (pl. doboz.txt): ");
     scanf("%s", doboz_fajlnev);
     printf("Add meg a készletek fájl nevét (pl. keszletek.txt): ");
     scanf("%s", keszlet_fajlnev);
 
+    //Beolvassuk a fájlokat
     alkatresz_t *doboz_alkatreszek = doboz_beolvas(doboz_fajlnev, &doboz_elemszam);
     if (doboz_alkatreszek == NULL) 
         return 1;
@@ -295,11 +299,12 @@ int main(void)
         return 1;
     }
 
+    //Megkeressük a legdrágább kirakható készletet
     keszlet_t *legdragabb_keszlet = legdragabb_kirakhato_keszlet(keszletek, keszlet_elemszam, doboz_alkatreszek, doboz_elemszam);
     if (legdragabb_keszlet != NULL)
-        printf("A legdrágább kirakható készlet: %s", legdragabb_keszlet->nev);
+        printf("\nA legdrágább kirakható készlet: %s (ára: %dFt)", legdragabb_keszlet->nev, legdragabb_keszlet->ar);
     else
-        printf("Egyik készlet sem rakható ki a dobozban lévő alkatrészekkel");
+        printf("\nEgyik készlet sem rakható ki a dobozban lévő alkatrészekkel");
     free(doboz_alkatreszek);
     free(keszletek);
     return 0;
