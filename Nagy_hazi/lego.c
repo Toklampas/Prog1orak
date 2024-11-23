@@ -269,7 +269,7 @@ int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n, unsign
         }
         else if (!eleg_ez_a_darab && kiiras == 1)
         {
-            printf("%s alkatreszbol meg %u db szukseges\n", jelenlegi_alkatresz->id, jelenlegi_alkatresz->darab);
+            printf("%s alkatreszbol meg %udb szukseges\n", jelenlegi_alkatresz->id, jelenlegi_alkatresz->darab);
             van_hianyzo = 1;
         }
     }
