@@ -104,8 +104,7 @@ keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
 {
     //Inicializáljuk a változókat
     *n = 0;
-    int i = 0;
-    char sor[1000], nev[150];
+    char sor[1000];
     keszlet_t *keszletek = NULL;
     
     //A készletek adatait tartalmazó fájl megnyitása olvasásra, ha nem sikerül, akkor hibaüzenet és NULL-t adunk vissza
@@ -254,13 +253,14 @@ keszlet_t* legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek
     //Ha kirakható és az ára nagyobb, mint a jelenlegi maximum, akkor frissítjük a maximumot és a legdrágább készlet pointerét
     for (int i = 0; i < keszletek_n; i++)
         if (kirakhato_e(&keszletek[i], doboz, doboz_n)) 
+        {    
             if (keszletek[i].ar > max)
             {
                 max = keszletek[i].ar;
                 legdragabb = &keszletek[i];
             }
-        else
-            //printf("DEBUG: A %s készlet nem rakható ki a dobozban lévő alkatrészekkel\n", keszletek[i].nev);
+        }
+        //else printf("DEBUG: A %s készlet nem rakható ki a dobozban lévő alkatrészekkel\n", keszletek[i].nev);
     return legdragabb;
 }
 
