@@ -252,7 +252,7 @@ int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n, unsign
                 }
                 else if(kiiras == 1 && doboz_alkatresz->darab < jelenlegi_alkatresz->darab)
                 {
-                    printf("%s alkatreszbol meg %udb szukseges\n", jelenlegi_alkatresz->id, jelenlegi_alkatresz->darab - doboz_alkatresz->darab);
+                    printf("  -> %s alkatreszbol meg %udb szukseges\n", jelenlegi_alkatresz->id, jelenlegi_alkatresz->darab - doboz_alkatresz->darab);
                     eleg_ez_a_darab = 1;
                     van_hianyzo = 1;
                 }
@@ -269,7 +269,7 @@ int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n, unsign
         }
         else if (!eleg_ez_a_darab && kiiras == 1)
         {
-            printf("%s alkatreszbol meg %udb szukseges\n", jelenlegi_alkatresz->id, jelenlegi_alkatresz->darab);
+            printf("  -> %s alkatreszbol meg %udb szukseges\n", jelenlegi_alkatresz->id, jelenlegi_alkatresz->darab);
             van_hianyzo = 1;
         }
     }
@@ -277,7 +277,7 @@ int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n, unsign
     //Ha nincs hiányzó alkatrész és a kiiírás be van kapcsolva, akkor kiírjuk, hogy minden szükséges alkatrész megtalálható
     if (kiiras == 1 && !van_hianyzo)
     {
-        printf("Minden szukseges alkatresz megtalalhato a dobozban!\n");
+        printf("  -> Minden szukseges alkatresz megtalalhato a dobozban!\n");
     }
 
     return 1;
