@@ -328,12 +328,12 @@ keszlet_t* keszlet_keres(keszlet_t *keszletek, unsigned keszletek_n, char *nev)
 
 int menu(keszlet_t *keszletek, unsigned keszlet_elemszam, alkatresz_t *doboz_alkatreszek, unsigned doboz_elemszam)
 {
-    printf("\n--------------- Lego kezelő ---------------");
+    printf("\n---------------  Lego kezelő  ---------------");
     printf("\n1. Legdrágább kirakható készlet keresése");
     printf("\n2. Készlet keresése név szerint");
     printf("\n3. Hiányzó alkatrészek listázása");
     printf("\n4. Kilépés");
-    printf("\n-------------------------------------------");
+    printf("\n---------------------------------------------");
     printf("\n\nVálassz egy műveletet: ");
 
     int valasztas;
