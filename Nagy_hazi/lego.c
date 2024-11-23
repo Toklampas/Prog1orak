@@ -336,10 +336,10 @@ int menu(keszlet_t *keszletek, unsigned keszlet_elemszam, alkatresz_t *doboz_alk
     printf("\n---------------------------------------------");
     printf("\n\nVálassz egy műveletet: ");
 
-    int valasztas;
-    scanf("%d", &valasztas);
+    int menupont;
+    scanf("%d", &menupont);
 
-    switch(valasztas)
+    switch(menupont)
     {
         case 1:
         {
@@ -378,7 +378,14 @@ int menu(keszlet_t *keszletek, unsigned keszlet_elemszam, alkatresz_t *doboz_alk
             return 3;
         }
         case 4:
+        {
             return 4;
+        }
+        default:
+        {
+            printf("\nERROR: Nem létezik ilyen menüpont\n");
+            return 0;
+        }
     }
 }
 
