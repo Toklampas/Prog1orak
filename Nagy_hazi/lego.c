@@ -39,6 +39,28 @@ typedef struct {
 } keszlet_t;
 
 
+//Ez a függvény felszabadítja az alkatrészek listáját
+//Bemenetnek az alkatrészek listára mutató pointert kapja meg
+void free_alkatresz_lista(alkatresz_t *lista)
+{
+    alkatresz_t *temp;
+    while (lista != NULL)
+    {
+        temp = lista;
+        lista = lista->next;
+        free(temp);
+    }
+}
+
+//Ez a függvény felszabadítja a készletek tömbjét
+//Bemenetnek a készletek tömbjére mutató pointert és a készletek számát kapja meg
+void free_keszlet_tomb(keszlet_t *keszletek, unsigned keszlet_elemszam)
+{
+    for (int i = 0; i < keszlet_elemszam; i++)
+        free_alkatresz_lista(keszletek[i].alkatreszek);
+    free(keszletek);
+}
+
 //Ez a függvény beolvassa a dobozban lévő alkatrészeket egy fájlból és visszaadja őket egy láncolt listában
 //Bemenetnek a fájl nevét és egy pointert adunk meg, ami a beolvasott alkatrésztípusok számát fogja tárolni
 //Viszatérési értéke az alkatrészek listája, ha sikerült beolvasni, egyébként NULL
@@ -261,31 +283,9 @@ keszlet_t* legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek
     return legdragabb;
 }
 
-//Ez a függvény felszabadítja az alkatrészek listáját
-//Bemenetnek az alkatrészek listára mutató pointert kapja meg
-void free_alkatresz_lista(alkatresz_t *lista)
-{
-    alkatresz_t *temp;
-    while (lista != NULL)
-    {
-        temp = lista;
-        lista = lista->next;
-        free(temp);
-    }
-}
-
-//Ez a függvény felszabadítja a készletek tömbjét
-//Bemenetnek a készletek tömbjére mutató pointert és a készletek számát kapja meg
-void free_keszlet_tomb(keszlet_t *keszletek, unsigned keszlet_elemszam)
-{
-    for (int i = 0; i < keszlet_elemszam; i++)
-        free_alkatresz_lista(keszletek[i].alkatreszek);
-    free(keszletek);
-}
-
 //A főprogram
-//Bekéri a doboz és a készletek fájl nevét, majd beolvassa őket
-//Ezutan meghívja a legdrágább kirakható készletet kereső függvényt és kiírja az eredményt
+//Bekéri a doboz és a készletek fájl nevét, majd beolvassa őket és meghívja a legdrágább kirakható készletet kereső függvényt
+//Ezután kiírja a legdrágább készlet nevét és árát, majd felszabadítja a lefoglalt memóriákat
 int main(void)
 {
     //A változók inicializálása
@@ -313,9 +313,9 @@ int main(void)
     //Megkeressük a legdrágább kirakható készletet
     keszlet_t *legdragabb_keszlet = legdragabb_kirakhato_keszlet(keszletek, keszlet_elemszam, doboz_alkatreszek, doboz_elemszam);
     if (legdragabb_keszlet != NULL)
-        printf("\nA legdrágább kirakható készlet: %s (ára: %dFt)", legdragabb_keszlet->nev, legdragabb_keszlet->ar);
+        printf("\nA legdrágább kirakható készlet: %s (ára: %dFt)\n", legdragabb_keszlet->nev, legdragabb_keszlet->ar);
     else
-        printf("\nEgyik készlet sem rakható ki a dobozban lévő alkatrészekkel");
+        printf("\nEgyik készlet sem rakható ki a dobozban lévő alkatrészekkel\n");
     
     //Lefoglalt memóriák felszabadítása
     free_keszlet_tomb(keszletek, keszlet_elemszam);
