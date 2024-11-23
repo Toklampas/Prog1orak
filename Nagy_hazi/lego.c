@@ -56,7 +56,7 @@ void free_alkatresz_lista(alkatresz_t *lista)
 //Bemenetnek a készletek tömbjére mutató pointert és a készletek számát kapja meg
 void free_keszlet_tomb(keszlet_t *keszletek, unsigned keszlet_elemszam)
 {
-    for (int i = 0; i < keszlet_elemszam; i++)
+    for (unsigned i = 0; i < keszlet_elemszam; i++)
         free_alkatresz_lista(keszletek[i].alkatreszek);
     free(keszletek);
 }
@@ -268,7 +268,7 @@ keszlet_t* legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek
     unsigned max = 0;
     //Végigmegyünk az összes készleten és megnézzük, hogy kirakható-e a dobozban lévő alkatrészekből
     //Ha kirakható és az ára nagyobb, mint a jelenlegi maximum, akkor frissítjük a maximumot és a legdrágább készlet pointerét
-    for (int i = 0; i < keszletek_n; i++)
+    for (unsigned i = 0; i < keszletek_n; i++)
     {
         if (kirakhato_e(&keszletek[i], doboz, doboz_n)) 
         {    
