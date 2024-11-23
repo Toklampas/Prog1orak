@@ -331,7 +331,7 @@ keszlet_t* keszlet_keres(keszlet_t *keszletek, unsigned keszletek_n, char *nev)
 //Visszatérési értéke a felhasználó által választott menüpont száma, hiba esetén 0
 int menu(keszlet_t *keszletek, unsigned keszlet_elemszam, alkatresz_t *doboz_alkatreszek, unsigned doboz_elemszam)
 {
-    printf("\n\n---------------  Lego kezelo  ---------------");
+    printf("\n\n\n---------------  Lego kezelo  ---------------");
     printf("\n1. Legdragabb kirakhato keszlet keresese");
     printf("\n2. Keszlet keresese nev szerint");
     printf("\n3. Hianyzo alkatreszek listazasa");
@@ -348,19 +348,19 @@ int menu(keszlet_t *keszletek, unsigned keszlet_elemszam, alkatresz_t *doboz_alk
         {
             keszlet_t *legdragabb_keszlet = legdragabb_kirakhato_keszlet(keszletek, keszlet_elemszam, doboz_alkatreszek, doboz_elemszam);
             if (legdragabb_keszlet != NULL)
-                printf("\nA legdragabb kirakhato keszlet: %s (ara: %dFt)\n", legdragabb_keszlet->nev, legdragabb_keszlet->ar);
+                printf("\n\nA legdragabb kirakhato keszlet: %s (ara: %dFt)\n", legdragabb_keszlet->nev, legdragabb_keszlet->ar);
             else
-                printf("\nEgyik keszlet sem rakhato ki a dobozban levo alkatreszekkel\n");
+                printf("\n\nEgyik keszlet sem rakhato ki a dobozban levo alkatreszekkel\n");
             return 1;
         }
         case 2:
         {
             char keresett_nev[100];
-            printf("Add meg a keresett keszlet nevet: ");
+            printf("\n\nAdd meg a keresett keszlet nevet: ");
             scanf("%99s", keresett_nev);
             keszlet_t *talalt = keszlet_keres(keszletek, keszlet_elemszam, keresett_nev);
             if (talalt)
-                printf("Talalat: %s - %dFt\n", talalt->nev, talalt->ar);
+                printf("\nTalalat: %s - %dFt\n", talalt->nev, talalt->ar);
             else
                 printf("\nNem talalhato ilyen nevu keszlet\n");
             return 2;
@@ -368,7 +368,7 @@ int menu(keszlet_t *keszletek, unsigned keszlet_elemszam, alkatresz_t *doboz_alk
         case 3:
         {
             char keszlet_nev[100];
-            printf("Add meg a keszlet nevet: ");
+            printf("\n\nAdd meg a keszlet nevet: ");
             scanf("%99s", keszlet_nev);
             keszlet_t *keszlet = keszlet_keres(keszletek, keszlet_elemszam, keszlet_nev);
             if (keszlet)
