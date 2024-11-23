@@ -248,10 +248,11 @@ int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n)
 keszlet_t* legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek_n, alkatresz_t *doboz, unsigned doboz_n)
 {
     keszlet_t *legdragabb = NULL;
-    int max = 0;
+    unsigned max = 0;
     //Végigmegyünk az összes készleten és megnézzük, hogy kirakható-e a dobozban lévő alkatrészekből
     //Ha kirakható és az ára nagyobb, mint a jelenlegi maximum, akkor frissítjük a maximumot és a legdrágább készlet pointerét
     for (int i = 0; i < keszletek_n; i++)
+    {
         if (kirakhato_e(&keszletek[i], doboz, doboz_n)) 
         {    
             if (keszletek[i].ar > max)
@@ -261,6 +262,7 @@ keszlet_t* legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek
             }
         }
         //else printf("DEBUG: A %s készlet nem rakható ki a dobozban lévő alkatrészekkel\n", keszletek[i].nev);
+    }
     return legdragabb;
 }
 
@@ -289,7 +291,8 @@ int main(void)
     if (keszletek == NULL)
     {
         alkatresz_t *temp;
-        while (doboz_alkatreszek != NULL) {
+        while (doboz_alkatreszek != NULL)
+        {
             temp = doboz_alkatreszek;
             doboz_alkatreszek = doboz_alkatreszek->next;
             free(temp);
@@ -308,7 +311,8 @@ int main(void)
     for (int i = 0; i < keszlet_elemszam; i++)
     {
         alkatresz_t *alkatresz = keszletek[i].alkatreszek;
-        while (alkatresz != NULL) {
+        while (alkatresz != NULL)
+        {
             alkatresz_t *temp = alkatresz;
             alkatresz = alkatresz->next;
             free(temp);
