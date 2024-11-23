@@ -271,12 +271,10 @@ keszlet_t* legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek
 int main(void)
 {
     //A változók inicializálása
-    unsigned doboz_elemszam;
-    unsigned keszlet_elemszam;
-    char doboz_fajlnev[100];
-    char keszlet_fajlnev[100];
+    unsigned doboz_elemszam, keszlet_elemszam;
+    char doboz_fajlnev[100], keszlet_fajlnev[100];
 
-    //Bekérjük a fájlneveket
+    //Bekérjük a fájlneveket, limitálva a hosszukat 100 karakterre
     printf("Add meg a doboz fájl nevét (pl. doboz.txt): ");
     scanf("%99s", doboz_fajlnev);
     printf("Add meg a készletek fájl nevét (pl. keszletek.txt): ");
@@ -307,7 +305,7 @@ int main(void)
         printf("\nEgyik készlet sem rakható ki a dobozban lévő alkatrészekkel");
     
     //Lefoglalt memóriák felszabadítása
-    for (unsigned i = 0; i < keszlet_elemszam; i++)
+    for (int i = 0; i < keszlet_elemszam; i++)
     {
         alkatresz_t *alkatresz = keszletek[i].alkatreszek;
         while (alkatresz != NULL) {
