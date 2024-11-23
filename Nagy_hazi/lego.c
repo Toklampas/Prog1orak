@@ -21,7 +21,7 @@ kirakható.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include "debugmalloc.h"
+#include "debugmalloc.h"
 
 //Egy alkatrész adatait tároló struktúra
 typedef struct alkatresz_t {
@@ -65,12 +65,7 @@ alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
         alkatresz_t *uj_alkatresz = malloc(sizeof(alkatresz_t));
         if (uj_alkatresz == NULL)
         {
-            while (alkatreszek != NULL)
-            {
-                alkatresz_t *temp = alkatreszek;
-                alkatreszek = alkatreszek->next;
-                free(temp);
-            }
+            free_alkatresz_lista(alkatreszek);
             fclose(doboz_fajl);
             return NULL;
         }
@@ -266,6 +261,27 @@ keszlet_t* legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek
     return legdragabb;
 }
 
+//Ez a függvény felszabadítja az alkatrészek listáját
+//Bemenetnek az alkatrészek listára mutató pointert kapja meg
+void free_alkatresz_lista(alkatresz_t *lista)
+{
+    alkatresz_t *temp;
+    while (lista != NULL)
+    {
+        temp = lista;
+        lista = lista->next;
+        free(temp);
+    }
+}
+
+//Ez a függvény felszabadítja a készletek tömbjét
+//Bemenetnek a készletek tömbjére mutató pointert és a készletek számát kapja meg
+void free_keszlet_tomb(keszlet_t *keszletek, unsigned keszlet_elemszam)
+{
+    for (int i = 0; i < keszlet_elemszam; i++)
+        free_alkatresz_lista(keszletek[i].alkatreszek);
+    free(keszletek);
+}
 
 //A főprogram
 //Bekéri a doboz és a készletek fájl nevét, majd beolvassa őket
@@ -290,13 +306,7 @@ int main(void)
     keszlet_t *keszletek = keszlet_beolvas(keszlet_fajlnev, &keszlet_elemszam);
     if (keszletek == NULL)
     {
-        alkatresz_t *temp;
-        while (doboz_alkatreszek != NULL)
-        {
-            temp = doboz_alkatreszek;
-            doboz_alkatreszek = doboz_alkatreszek->next;
-            free(temp);
-        }
+        free_alkatresz_lista(doboz_alkatreszek);
         return 1;
     }
 
@@ -308,25 +318,8 @@ int main(void)
         printf("\nEgyik készlet sem rakható ki a dobozban lévő alkatrészekkel");
     
     //Lefoglalt memóriák felszabadítása
-    for (int i = 0; i < keszlet_elemszam; i++)
-    {
-        alkatresz_t *alkatresz = keszletek[i].alkatreszek;
-        while (alkatresz != NULL)
-        {
-            alkatresz_t *temp = alkatresz;
-            alkatresz = alkatresz->next;
-            free(temp);
-        }
-    }
-    free(keszletek);
-
-    alkatresz_t *temp;
-    while (doboz_alkatreszek != NULL)
-    {
-        temp = doboz_alkatreszek;
-        doboz_alkatreszek = doboz_alkatreszek->next;
-        free(temp);
-    }
+    free_keszlet_tomb(keszletek, keszlet_elemszam);
+    free_alkatresz_lista(doboz_alkatreszek);
 
     return 0;
 }
