@@ -283,6 +283,36 @@ keszlet_t* legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek
     return legdragabb;
 }
 
+keszlet_t* keszlet_keres(keszlet_t *keszletek, unsigned keszletek_n, char *nev)
+{
+    for (unsigned i = 0; i < keszletek_n; i++)
+    {
+        if (strstr(keszletek[i].nev, nev) != NULL)
+        {
+            return &keszletek[i];
+        }
+    }
+    return NULL;
+}
+
+void kiir_hianyzo_alkatreszek(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n)
+{
+    printf("\nHiányzó alkatrészek a %s készlet megépítéséhez:\n", keszlet->nev);
+    for (unsigned i = 0; i < keszlet->alkatreszfajta_darab; i++)
+    {
+        for (unsigned j = 0; j < doboz_n; j++)
+        {
+            if (strcmp(keszlet->alkatreszek[i].id, doboz[j].id) == 0)
+            {
+                if (doboz[j].darab < keszlet->alkatreszek[i].darab)
+                {
+                    printf("%s alkatrészből még %udb szükséges\n", keszlet->alkatreszek[i].id, keszlet->alkatreszek[i].darab - doboz[j].darab);
+                }
+            }
+        }
+    }
+}
+
 //A főprogram
 //Bekéri a doboz és a készletek fájl nevét, majd beolvassa őket és meghívja a legdrágább kirakható készletet kereső függvényt
 //Ezután kiírja a legdrágább készlet nevét és árát, majd felszabadítja a lefoglalt memóriákat
