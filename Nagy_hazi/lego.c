@@ -75,7 +75,7 @@ alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
     FILE *doboz_fajl = fopen(fajlnev, "r");
     if (doboz_fajl == NULL)
     {
-        printf("\nERROR: Nem létezik \"%s\" nevű fájl a mappában!", fajlnev);
+        printf("\nERROR: Nem letezik \"%s\" nevu fajl a mappaban!", fajlnev);
         return NULL;
     }
 
@@ -102,7 +102,7 @@ alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
         }
         else
         {
-            printf("\nERROR: Nem várt formátum a %s fájl %d. sorában: %s", fajlnev, *n + 1, sor);
+            printf("\nERROR: Nem vart formatum a %s fajl %d. soraban: %s", fajlnev, *n + 1, sor);
             free(uj_alkatresz);
             return NULL;
         }
@@ -128,7 +128,7 @@ keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
     FILE *keszlet_fajl = fopen(fajlnev, "r");
     if (keszlet_fajl == NULL)
     {
-        printf("\nERROR: Nem létezik \"%s\" nevű fájl a mappában!", fajlnev);
+        printf("\nERROR: Nem letezik \"%s\" nevu fajl a mappaban!", fajlnev);
         return NULL;
     }
 
@@ -198,7 +198,7 @@ keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
                 }
                 else
                 {
-                    printf("\nERROR: Nem várt formátum a %s fájl %d. sorában: %s", fajlnev, *n + 1, sor);
+                    printf("\nERROR: Nem vart formatum a %s fajl %d. soraban: %s", fajlnev, *n + 1, sor);
                     free(uj_alkatresz);
                     return NULL;
                 }
@@ -252,7 +252,7 @@ int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n, unsign
                 }
                 else if(kiiras == 1 && doboz_alkatresz->darab < jelenlegi_alkatresz->darab)
                 {
-                    printf("%s alkatrészből még %udb szükséges\n", jelenlegi_alkatresz->id, jelenlegi_alkatresz->darab - doboz_alkatresz->darab);
+                    printf("%s alkatreszbol meg %udb szukseges\n", jelenlegi_alkatresz->id, jelenlegi_alkatresz->darab - doboz_alkatresz->darab);
                     eleg_ez_a_darab = 1;
                     van_hianyzo = 1;
                 }
@@ -269,7 +269,7 @@ int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n, unsign
         }
         else if (!eleg_ez_a_darab && kiiras == 1)
         {
-            printf("%s alkatrészből még %u db szükséges\n", jelenlegi_alkatresz->id, jelenlegi_alkatresz->darab);
+            printf("%s alkatreszbol meg %u db szukseges\n", jelenlegi_alkatresz->id, jelenlegi_alkatresz->darab);
             van_hianyzo = 1;
         }
     }
@@ -277,7 +277,7 @@ int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n, unsign
     //Ha nincs hiányzó alkatrész és a kiiírás be van kapcsolva, akkor kiírjuk, hogy minden szükséges alkatrész megtalálható
     if (kiiras == 1 && !van_hianyzo)
     {
-        printf("Minden szükséges alkatrész megtalálható a dobozban!\n");
+        printf("Minden szukseges alkatresz megtalalhato a dobozban!\n");
     }
 
     return 1;
@@ -326,15 +326,18 @@ keszlet_t* keszlet_keres(keszlet_t *keszletek, unsigned keszletek_n, char *nev)
     return NULL;
 }
 
+//Ez a függvény kiírja a menüt és kezeli a felhasználói bevitelt
+//Bemenetnek a készletek tömbjét, a készletek számát, a dobozban lévő alkatrészeket és a dobozban lévő alkatrészek számát kapja meg
+//Visszatérési értéke a felhasználó által választott menüpont száma, hiba esetén 0
 int menu(keszlet_t *keszletek, unsigned keszlet_elemszam, alkatresz_t *doboz_alkatreszek, unsigned doboz_elemszam)
 {
-    printf("\n---------------  Lego kezelő  ---------------");
-    printf("\n1. Legdrágább kirakható készlet keresése");
-    printf("\n2. Készlet keresése név szerint");
-    printf("\n3. Hiányzó alkatrészek listázása");
-    printf("\n4. Kilépés");
+    printf("\n---------------  Lego kezelo  ---------------");
+    printf("\n1. Legdragabb kirakhato keszlet keresese");
+    printf("\n2. Keszlet keresese nev szerint");
+    printf("\n3. Hianyzo alkatreszek listazasa");
+    printf("\n4. Kilepes");
     printf("\n---------------------------------------------");
-    printf("\n\nVálassz egy műveletet: ");
+    printf("\n\nValassz egy muveletet: ");
 
     int menupont;
     scanf("%d", &menupont);
@@ -345,9 +348,9 @@ int menu(keszlet_t *keszletek, unsigned keszlet_elemszam, alkatresz_t *doboz_alk
         {
             keszlet_t *legdragabb_keszlet = legdragabb_kirakhato_keszlet(keszletek, keszlet_elemszam, doboz_alkatreszek, doboz_elemszam);
             if (legdragabb_keszlet != NULL)
-                printf("\nA legdrágább kirakható készlet: %s (ára: %dFt)\n", legdragabb_keszlet->nev, legdragabb_keszlet->ar);
+                printf("\nA legdragabb kirakhato keszlet: %s (ara: %dFt)\n", legdragabb_keszlet->nev, legdragabb_keszlet->ar);
             else
-                printf("\nEgyik készlet sem rakható ki a dobozban lévő alkatrészekkel\n");
+                printf("\nEgyik keszlet sem rakhato ki a dobozban levo alkatreszekkel\n");
             return 1;
         }
         case 2:
@@ -357,24 +360,24 @@ int menu(keszlet_t *keszletek, unsigned keszlet_elemszam, alkatresz_t *doboz_alk
             scanf("%99s", keresett_nev);
             keszlet_t *talalt = keszlet_keres(keszletek, keszlet_elemszam, keresett_nev);
             if (talalt)
-                printf("Találat: %s (%dFt)\n", talalt->nev, talalt->ar);
+                printf("Talalat: %s (%dFt)\n", talalt->nev, talalt->ar);
             else
-                printf("\nNem található ilyen nevű készlet\n");
+                printf("\nNem talalhato ilyen nevu keszlet\n");
             return 2;
         }
         case 3:
         {
             char keszlet_nev[100];
-            printf("Add meg a készlet nevét: ");
+            printf("Add meg a keszlet nevet: ");
             scanf("%99s", keszlet_nev);
             keszlet_t *keszlet = keszlet_keres(keszletek, keszlet_elemszam, keszlet_nev);
             if (keszlet)
             {
-                printf("\nHiányzó alkatrészek a %s készlet megépítéséhez:\n", keszlet->nev);
+                printf("\nHianyzo alkatreszek a %s keszlet megepitesehez:\n", keszlet->nev);
                 kirakhato_e(keszlet, doboz_alkatreszek, doboz_elemszam, 1);
             }
             else
-                printf("\nERROR: Nem található ilyen nevű készlet\n");
+                printf("\nERROR: Nem talalhato ilyen nevu keszlet\n");
             return 3;
         }
         case 4:
@@ -383,7 +386,7 @@ int menu(keszlet_t *keszletek, unsigned keszlet_elemszam, alkatresz_t *doboz_alk
         }
         default:
         {
-            printf("\nERROR: Nem létezik ilyen menüpont\n");
+            printf("\nERROR: Nem letezik ilyen menupont\n");
             return 0;
         }
     }
@@ -399,9 +402,9 @@ int main(void)
     char doboz_fajlnev[100], keszlet_fajlnev[100];
 
     //Bekérjük a fájlneveket, limitálva a hosszukat 100 karakterre
-    printf("Add meg a doboz fájl nevét (pl. doboz.txt): ");
+    printf("Add meg a doboz fajl nevet (pl. doboz.txt): ");
     scanf("%99s", doboz_fajlnev);
-    printf("Add meg a készletek fájl nevét (pl. keszletek.txt): ");
+    printf("Add meg a keszletek fajl nevet (pl. keszletek.txt): ");
     scanf("%99s", keszlet_fajlnev);
 
     //Beolvassuk a fájlokat
