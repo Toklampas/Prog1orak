@@ -228,9 +228,9 @@ keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
 }
 
 //Ez a függvény megvizsgálja, hogy a megadott készlet kirakható-e a dobozban lévő alkatrészekből
-//Bemenetnek a készletet és a dobozban lévő alkatrészeket kapja meg, valamint a dobozban lévő alkatrészek számát
-//Visszatérési értéke 1, ha a készlet kirakható, 0, ha nem
-int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n)
+//Bemenetnek a készletet és a dobozban lévő alkatrészeket kapja meg, valamint a dobozban lévő alkatrészek számát és azt, hogy kiírja-e a hiányzó alkatrészeket
+//Visszatérési értéke 1, ha a készlet kirakható, 0, ha nem, amennyiben kiírásra kerülnek a hiányzó alkatrészek, akkor 1
+int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n, unsigned kiiras) 
 {
     //Végigmegyünk az összes alkatrészen a készletben
     for (alkatresz_t *jelenlegi_alkatresz = keszlet->alkatreszek; jelenlegi_alkatresz != NULL; jelenlegi_alkatresz = jelenlegi_alkatresz->next)
@@ -241,19 +241,29 @@ int kirakhato_e(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n)
         {
             //printf("DEBUG: Comparing part %s, needed: %u with part %s, available: %u\n", jelenlegi_alkatresz->id, jelenlegi_alkatresz->darab, doboz_alkatresz->id, doboz_alkatresz->darab);
             //Ha megtaláljuk az alkatrészt a dobozban, akkor megnézzük, hogy elég van-e belőle
+            //Ha kiírásra kerülnek a hiányzó alkatrészek, akkor azt is kiírjuk
             if (strcmp(jelenlegi_alkatresz->id, doboz_alkatresz->id) == 0)
             {
-                if (doboz_alkatresz->darab >= jelenlegi_alkatresz->darab)
+                if (doboz_alkatresz->darab >= jelenlegi_alkatresz->darab && kiiras == 0)
                 {
                     eleg_ez_a_darab = 1;
                     break;
                 }
+                else if(kiiras == 1 && doboz_alkatresz->darab < jelenlegi_alkatresz->darab)
+                {
+                    printf("%s alkatrészből még %udb szükséges\n", jelenlegi_alkatresz->id, jelenlegi_alkatresz->darab - doboz_alkatresz->darab);
+                    eleg_ez_a_darab = 1;
+                }
             }
         }
-        if (!eleg_ez_a_darab)
+        if (!eleg_ez_a_darab && kiiras == 0)
         {
             //printf("DEBUG: Nem található elég %s alkatrész a dobozban\n", jelenlegi_alkatresz->id);
             return 0;
+        }
+        else if (!eleg_ez_a_darab && kiiras == 1)
+        {
+            printf("%s alkatrészből még %u db szükséges\n", jelenlegi_alkatresz->id, jelenlegi_alkatresz->darab);
         }
     }
     return 1;
@@ -270,7 +280,7 @@ keszlet_t* legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek
     //Ha kirakható és az ára nagyobb, mint a jelenlegi maximum, akkor frissítjük a maximumot és a legdrágább készlet pointerét
     for (unsigned i = 0; i < keszletek_n; i++)
     {
-        if (kirakhato_e(&keszletek[i], doboz, doboz_n)) 
+        if (kirakhato_e(&keszletek[i], doboz, doboz_n, 0)) 
         {    
             if (keszletek[i].ar > max)
             {
@@ -283,34 +293,23 @@ keszlet_t* legdragabb_kirakhato_keszlet(keszlet_t *keszletek, unsigned keszletek
     return legdragabb;
 }
 
+//Ez a függvény megkeresi a készletet a neve alapján, nem case sensitive módon
+//Bemenetnek a készletek tömbjét, a készletek számát és a keresett készlet nevét kapja meg
+//Visszatérési értéke a keresett készletre mutató pointer, ha van ilyen, egyébként NULL
 keszlet_t* keszlet_keres(keszlet_t *keszletek, unsigned keszletek_n, char *nev)
 {
     for (unsigned i = 0; i < keszletek_n; i++)
     {
-        if (strstr(keszletek[i].nev, nev) != NULL)
+        //A keresett és a vizsgált készlet nevének összehasonlítása, nagybetűsítve, hogy ne legyen case sensitive a függvény
+        char keszlet_nev[150], keresett_nev[150];
+        strcpy(keszlet_nev, keszletek[i].nev);
+        strcpy(keresett_nev, nev);
+        if (strstr(strupr(keszlet_nev), strupr(keresett_nev)) != NULL)
         {
             return &keszletek[i];
         }
     }
     return NULL;
-}
-
-void kiir_hianyzo_alkatreszek(keszlet_t *keszlet, alkatresz_t *doboz, unsigned doboz_n)
-{
-    printf("\nHiányzó alkatrészek a %s készlet megépítéséhez:\n", keszlet->nev);
-    for (unsigned i = 0; i < keszlet->alkatreszfajta_darab; i++)
-    {
-        for (unsigned j = 0; j < doboz_n; j++)
-        {
-            if (strcmp(keszlet->alkatreszek[i].id, doboz[j].id) == 0)
-            {
-                if (doboz[j].darab < keszlet->alkatreszek[i].darab)
-                {
-                    printf("%s alkatrészből még %udb szükséges\n", keszlet->alkatreszek[i].id, keszlet->alkatreszek[i].darab - doboz[j].darab);
-                }
-            }
-        }
-    }
 }
 
 //A főprogram
@@ -340,12 +339,50 @@ int main(void)
         return 1;
     }
 
-    //Megkeressük a legdrágább kirakható készletet
-    keszlet_t *legdragabb_keszlet = legdragabb_kirakhato_keszlet(keszletek, keszlet_elemszam, doboz_alkatreszek, doboz_elemszam);
-    if (legdragabb_keszlet != NULL)
-        printf("\nA legdrágább kirakható készlet: %s (ára: %dFt)\n", legdragabb_keszlet->nev, legdragabb_keszlet->ar);
-    else
-        printf("\nEgyik készlet sem rakható ki a dobozban lévő alkatrészekkel\n");
+    printf("\n1. Legdrágább kirakható készlet keresése");
+    printf("\n2. Készlet keresése név szerint");
+    printf("\n3. Hiányzó alkatrészek listázása");
+    printf("\nVálassz egy műveletet: ");
+
+    int valasztas;
+    scanf("%d", &valasztas);
+
+    switch(valasztas)
+    {
+        case 1:
+        {
+            keszlet_t *legdragabb_keszlet = legdragabb_kirakhato_keszlet(keszletek, keszlet_elemszam, doboz_alkatreszek, doboz_elemszam);
+            if (legdragabb_keszlet != NULL)
+                printf("\nA legdrágább kirakható készlet: %s (ára: %dFt)\n", legdragabb_keszlet->nev, legdragabb_keszlet->ar);
+            else
+                printf("\nEgyik készlet sem rakható ki a dobozban lévő alkatrészekkel\n");
+            break;
+        }
+        case 2:
+        {
+            char keresett_nev[100];
+            printf("Add meg a keresett készlet nevét: ");
+            scanf("%99s", keresett_nev);
+            keszlet_t *talalt = keszlet_keres(keszletek, keszlet_elemszam, keresett_nev);
+            if (talalt)
+                printf("Találat: %s (%dFt)\n", talalt->nev, talalt->ar);
+            break;
+        }
+        case 3:
+        {
+            char keszlet_nev[100];
+            printf("Add meg a készlet nevét: ");
+            scanf("%99s", keszlet_nev);
+            keszlet_t *keszlet = keszlet_keres(keszletek, keszlet_elemszam, keszlet_nev);
+            if (keszlet)
+            {
+                printf("\nHiányzó alkatrészek a %s készlet megépítéséhez:\n", keszlet->nev);
+                kirakhato_e(keszlet, doboz_alkatreszek, doboz_elemszam, 1);
+            }
+            break;
+        }
+    }
+
     
     //Lefoglalt memóriák felszabadítása
     free_keszlet_tomb(keszletek, keszlet_elemszam);
