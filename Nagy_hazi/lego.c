@@ -14,8 +14,10 @@ szerkezet szerint. A készleteket egymástól egy üres sor választja el.
 2. sor: készlet építőelemei: pl. 4515374/60481 6 db 4515323/60412 3 db ... stb. 
 3. sor: készlet ára pl. 25000 
 
-A program kiírja, hogy melyik az a legdrágább készlet, mely a legósdobozban tárolt elemekből 
-kirakható.
+A programnak több funciója is van:
+-> kíírja, hogy melyik az a legdrágább készlet, mely a legósdobozban tárolt elemekből kirakható
+-> megkeresi a készletet a neve alapján és kiírja az árát
+-> kiírja, hogy egy adott készlethez milyen alkatrészek hiányoznak a dobozból
 */
 
 #include <stdio.h>
@@ -393,8 +395,9 @@ int menu(keszlet_t *keszletek, unsigned keszlet_elemszam, alkatresz_t *doboz_alk
 }
 
 //A főprogram
-//Bekéri a doboz és a készletek fájl nevét, majd beolvassa őket és meghívja a legdrágább kirakható készletet kereső függvényt
-//Ezután kiírja a legdrágább készlet nevét és árát, majd felszabadítja a lefoglalt memóriákat
+//Bekéri a doboz és a készletek fájl nevét, majd beolvassa őket és meghívja a menü függvényt
+//A menü függvény addig fut, amíg a felhasználó 4-est nem választ
+//Végül a program felszabadítja a lefoglalt memóriákat
 int main(void)
 {
     //A változók inicializálása
