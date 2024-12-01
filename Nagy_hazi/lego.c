@@ -1,23 +1,39 @@
 /*
-Egy szöveges fájl a legósdobozban tárolt alkatrészek katalógusát tartalmazza, minden sora egy alkatrész azonosítóját és darabszámát 
-Példa: 
-4515374/60481 6 db 
-4515323/60412 10 db 
-4530042/60117 5 db 
-4523109/60589 15 db 
-4537118/60600 7 db 
-4529082/60533 20 db
+Programozás alapjai 1. Nagy házi feladat
+Készítette: Albrecht Ádám (O9E6U1)
 
-Egy másik szöveges fájl lego készleteket tárol, minden készletet három sorban, az alábbi 
-szerkezet szerint. A készleteket egymástól egy üres sor választja el.
-1. sor: készlet neve: pl. NASA Apollo 11 holdkomp 
-2. sor: készlet építőelemei: pl. 4515374/60481 6 db 4515323/60412 3 db ... stb. 
-3. sor: készlet ára pl. 25000Ft 
+A nagy házi feladatnak elkészített programom egy LEGO kezelő alkalmazás, amely lehetővé teszi a
+felhasználó számára, hogy a meglévő LEGO alkatrészei alapján az alábbiakat tegye:
+• Lekérni, hogy melyik a legdrágább készlet, amit össze tud építeni.
+• Készletek keresése név szerint, majd azok árának megtekintése.
+• Egy adott készlet megépítéséhez hiányzó alkatrészek kilistázása.
 
-A programnak több funkciója is van:
--> kíírja, hogy melyik az a legdrágább készlet, mely a legósdobozban tárolt elemekből kirakható
--> megkeresi a készletet a neve alapján és kiírja az árát
--> kiírja, hogy egy adott készlethez milyen alkatrészek hiányoznak a dobozból
+A program indulás után bekéri két fájl nevét:
+1. Doboz fájl: Tartalmazza a rendelkezésre álló LEGO alkatrészeket.
+2. Készletek fájl: Tartalmazza a LEGO készletek adatait.
+
+Doboz fájl formátuma (pl. doboz.txt)
+Minden sor egy alkatrész azonosítóját és darabszámát tartalmazza az alábbi formában:
+<alkatrész_azonosító> <darab> db 
+Példa:
+4515374/60481 6 db
+4515323/60412 10 db
+4530042/60117 5 db
+…
+
+Készletek fájl formátuma (pl. keszletek.txt)
+Minden készlet adatai három sorban szerepelnek, készletek között üres sorral elválasztva:
+1. sor: Készlet neve (maximum 150 karakter)
+2. sor: Alkatrészek listája azonosítókkal és darabszámokkal, az alábbi formában:
+    <alkatrész_azonosító> <darab> db <alkatrész_azonosító> <darab> db ...
+3. sor: Készlet ára
+
+Példa:
+NASA Apollo 11 holdkomp
+4515374/60481 6 db 4515323/60412 3 db 4530042/60117 5 db
+25000Ft
+…
+
 */
 
 #include <stdio.h>
