@@ -12,9 +12,9 @@ Egy másik szöveges fájl lego készleteket tárol, minden készletet három so
 szerkezet szerint. A készleteket egymástól egy üres sor választja el.
 1. sor: készlet neve: pl. NASA Apollo 11 holdkomp 
 2. sor: készlet építőelemei: pl. 4515374/60481 6 db 4515323/60412 3 db ... stb. 
-3. sor: készlet ára pl. 25000 
+3. sor: készlet ára pl. 25000Ft 
 
-A programnak több funciója is van:
+A programnak több funkciója is van:
 -> kíírja, hogy melyik az a legdrágább készlet, mely a legósdobozban tárolt elemekből kirakható
 -> megkeresi a készletet a neve alapján és kiírja az árát
 -> kiírja, hogy egy adott készlethez milyen alkatrészek hiányoznak a dobozból
@@ -34,7 +34,7 @@ typedef struct alkatresz_t {
 
 //Egy készlet adatait tároló struktúra
 typedef struct {
-    char nev[150]; //A készlet neve
+    char nev[150+1]; //A készlet neve
     alkatresz_t *alkatreszek; //Az alkatrészek listája, amelyekből a készlet áll
     unsigned alkatreszfajta_darab; //Az alkatrészek listájának elemszáma
     unsigned ar; //A készlet ára
@@ -155,7 +155,7 @@ keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
         jelenlegi_keszlet->alkatreszfajta_darab = 0;
 
         //A készlet nevének beolvasása, majd az újsor karakter lecsérése a lezáró nullára
-        strncpy(jelenlegi_keszlet->nev, sor, 150);
+        strncpy(jelenlegi_keszlet->nev, sor, 150+1);
         *strchr(jelenlegi_keszlet->nev, '\n') = '\0';
 
         //Az alkatrészek beolvasása, amíg van mit
@@ -317,7 +317,7 @@ keszlet_t* keszlet_keres(keszlet_t *keszletek, unsigned keszletek_n, char *nev)
     for (unsigned i = 0; i < keszletek_n; i++)
     {
         //A keresett és a vizsgált készlet nevének összehasonlítása, nagybetűsítve, hogy ne legyen case sensitive a függvény
-        char jelenlegi_keszlet_nev[150], keresett_nev[150];
+        char jelenlegi_keszlet_nev[150+1], keresett_nev[150+1];
         strcpy(jelenlegi_keszlet_nev, keszletek[i].nev);
         strcpy(keresett_nev, nev);
         if (strstr(strupr(jelenlegi_keszlet_nev), strupr(keresett_nev)) != NULL)
