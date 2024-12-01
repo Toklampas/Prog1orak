@@ -23,7 +23,7 @@ A programnak több funciója is van:
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "debugmalloc.h"
+//#include "debugmalloc.h"
 
 //Egy alkatrész adatait tároló struktúra
 typedef struct alkatresz_t {
