@@ -33,7 +33,6 @@ NASA Apollo 11 holdkomp
 4515374/60481 6 db 4515323/60412 3 db 4530042/60117 5 db
 25000Ft
 …
-
 */
 
 #include <stdio.h>
