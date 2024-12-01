@@ -65,7 +65,7 @@ void free_keszlet_tomb(keszlet_t *keszletek, unsigned keszlet_elemszam)
 
 //Ez a függvény beolvassa a dobozban lévő alkatrészeket egy fájlból és visszaadja őket egy láncolt listában
 //Bemenetnek a fájl nevét és egy pointert adunk meg, ami a beolvasott alkatrésztípusok számát fogja tárolni
-//Viszatérési értéke az alkatrészek listája, ha sikerült beolvasni, egyébként NULL
+//Visszatérési értéke az alkatrészek listája, ha sikerült beolvasni, egyébként NULL pointer
 alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
 {
     //Inicializáljuk a változókat
@@ -118,7 +118,7 @@ alkatresz_t* doboz_beolvas(char *fajlnev, unsigned *n)
 
 //Ez a függvény beolvassa a készleteket egy fájlból és visszaadja őket egy dinamikus tömbben
 //Bemenetnek a fájl nevét és egy pointert adunk meg, ami a beolvasott készletek számát fogja tárolni
-//Visszatérési értéke a készletek tömbje, ha sikerült beolvasni, egyébként NULL
+//Visszatérési értéke a készletek tömbje, ha sikerült beolvasni, egyébként NULL pointer
 keszlet_t* keszlet_beolvas(char *fajlnev, unsigned *n)
 {
     //Inicializáljuk a változókat
