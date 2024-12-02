@@ -1,0 +1,10 @@
+doboz.txt
+keszletek.txt
+1
+2
+bugatti
+3
+crane
+2
+crane
+4
